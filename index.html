@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robin Koenig | Ingénieur Systèmes Embarqués</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --card-hover: #374151;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-dim: rgba(56, 189, 248, 0.1);
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      padding: 3rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+    .container { max-width: 780px; width: 100%; }
+    
+    header { margin-bottom: 2.5rem; }
+    h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+    .role { color: var(--accent); font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 1rem; }
+    .bio { color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; }
+    
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 3rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--accent); color: #0b0f17; font-weight: 600; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline { background: var(--card-bg); color: var(--text); border: 1px solid var(--card-border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    section { margin-bottom: 3rem; }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .grid { display: flex; flex-direction: column; gap: 1rem; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: border-color 0.2s ease;
+    }
+    .card:hover { border-color: var(--card-hover); }
+    .card-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; }
+    .card-title { font-size: 1.05rem; font-weight: 600; }
+    .card-subtitle { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); }
+    .card p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0.75rem; }
+    
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Robin Koenig</h1>
+      <div class="role">// Ingénieur Systèmes Embarqués & Hardware</div>
+      <p class="bio">
+        Étudiant ingénieur à l'ECE Paris. Spécialisé en conception de cartes électroniques (saisie de schémas, routage PCB KiCad), firmware bas niveau (C/C++, Python) et prototypage rapide (impression 3D, bancs de test).
+      </p>
+      <div class="actions">
+        <!-- Remplace ce lien par ton PDF hébergé ou placé dans le dépôt -->
+        <a href="Portfolio.pdf" class="btn btn-primary" target="_blank">📄 Télécharger le Portfolio (PDF)</a>
+        <a href="https://linkedin.com/in/ton-profil" class="btn btn-outline" target="_blank">LinkedIn</a>
+        <a href="https://fiverr.com/ton-profil" class="btn btn-outline" target="_blank">Fiverr Freelance</a>
+        <a href="mailto:robin.koenig@edu.ece.fr" class="btn btn-outline">Contact Email</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Projets Techniques</h2>
+      <div class="grid">
+        
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Formula Student — Interface Bus CAN</span>
+            <span class="card-subtitle">ARECE</span>
+          </div>
+          <p>
+            Conception matérielle complète d'une carte d'interface de bus différentiel pour véhicule autonome : alimentation régulée (7-40V vers 3.3V), protections TVS, transceiver SN65 et microcontrôleur ESP32. Validation sur banc d'essai avec analyseur de trames CAN.
+          </p>
+          <div class="tags">
+            <span class="tag">KiCad</span>
+            <span class="tag">ESP32</span>
+            <span class="tag">Bus CAN</span>
+            <span class="tag">Banc de test</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Rover Autonome & Navigation LIDAR</span>
+            <span class="card-subtitle">Robotique Mobile</span>
+          </div>
+          <p>
+            Intégration d'un capteur LIDAR pour cartographie 2D (SLAM/Rviz) et navigation autonome d'évitement d'obstacles avec ROS 2 et la suite Nav2 sous Linux Ubuntu. Conception d'une télécommande dédiée sur PCB avec liaison ESP-NOW / UART.
+          </p>
+          <div class="tags">
+            <span class="tag">ROS 2</span>
+            <span class="tag">Nav2</span>
+            <span class="tag">LIDAR</span>
+            <span class="tag">Linux</span>
+            <span class="tag">C++ / Python</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Amplificateur Analogique Push-Pull à Lampes</span>
+            <span class="card-subtitle">Électronique de Puissance</span>
+          </div>
+          <p>
+            Étude et conception schématique de circuits audio haute tension (tubes ECC83 et EL34). Routage double couche sous KiCad avec contraintes d'isolation diélectrique et plans de masse. Soudure manuelle et métrologie de laboratoire.
+          </p>
+          <div class="tags">
+            <span class="tag">Haute Tension</span>
+            <span class="tag">Routage PCB</span>
+            <span class="tag">Analogique</span>
+            <span class="tag">Audio</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Services & Prototypage Rapide</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Prestations Techniques Freelance</span>
+            <span class="card-subtitle">Fiverr</span>
+          </div>
+          <p>
+            Modélisation 3D complexe sous Fusion 360 / SolidWorks (maquettes architecturales à l'échelle, boîtiers mécaniques pour électronique), dimensionnement de charges acoustiques (WinISD) et fabrication additive FDM (Raise3D, Bambu Lab).
+          </p>
+          <div class="tags">
+            <span class="tag">Fusion 360</span>
+            <span class="tag">SolidWorks</span>
+            <span class="tag">Impression 3D</span>
+            <span class="tag">Acoustique</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Robin Koenig — Paris, France</span>
+      <span>Hébergé sur GitHub Pages</span>
+    </footer>
+  </div>
+</body>
+</html>

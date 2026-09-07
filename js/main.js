@@ -1,5 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ---------------------------------------------------------------------------
+  // THEME TOGGLE ENGINE
+  // ---------------------------------------------------------------------------
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  // Récupérer le choix sauvegardé, ou détecter la préférence de l'OS
+  const getInitialTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme;
+    }
+    return systemPrefersDark.matches ? 'dark' : 'light';
+  };
+
+  // Appliquer le thème sur le DOM et mettre à jour l'icône du bouton
+  const applyTheme = (theme) => {
+    if (theme === 'light') {
+      document.body.classList.add('light-theme');
+      if (themeIcon) themeIcon.textContent = '🌙'; // Proposer la lune pour revenir au sombre
+    } else {
+      document.body.classList.remove('light-theme');
+      if (themeIcon) themeIcon.textContent = '☀️'; // Proposer le soleil pour passer au clair
+    }
+  };
+
+  // Initialisation au chargement de la page
+  let currentTheme = getInitialTheme();
+  applyTheme(currentTheme);
+
+  // Bascule manuelle lors du clic sur le bouton
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      currentTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+      localStorage.setItem('theme', currentTheme);
+      applyTheme(currentTheme);
+    });
+  }
+
+  // Écouter les changements de thème en direct de l'OS (ex: mode nuit automatique à 20h)
+  systemPrefersDark.addEventListener('change', (e) => {
+    // Ne bascule automatiquement que si l'utilisateur n'a pas forcé un choix manuel
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+  
+  // ---------------------------------------------------------------------------
   // PROJECT DATABASE
   // Add new projects directly to this array:
   // ---------------------------------------------------------------------------

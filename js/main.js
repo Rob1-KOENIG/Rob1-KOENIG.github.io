@@ -54,40 +54,107 @@ document.addEventListener('DOMContentLoaded', () => {
   const projects = [
     {
       title: "Formula Student — CAN Bus Node",
+      type: "academic",
       category: "ARECE Autonomous Racing",
-      description: "Hardware design for an autonomous vehicle CAN interface: regulated power stage (7-40V to 3.3V), TVS diode surge protections, SN65 transceiver, and ESP32 microcontroller. Validated on a multi-node testbench using a CAN analyzer.",
+      description: "Hardware design for an autonomous vehicle CAN interface: regulated power stage (7-40V to 3.3V), TVS protections, SN65 transceiver, and ESP32. Multi-node testbench validation.",
       image: "images/can-bus.jpg",
       tags: ["KiCad", "ESP32", "CAN Bus", "Testbench"]
     },
     {
       title: "Autonomous Rover & LIDAR Navigation",
+      type: "academic",
       category: "Mobile Robotics",
-      description: "Real-time 2D environment mapping (SLAM/Rviz) and obstacle avoidance navigation using ROS 2 and the Nav2 stack on Linux Ubuntu. Engineered a custom PCB remote controller running ESP-NOW and UART serial communication.",
+      description: "Real-time 2D SLAM mapping and Nav2 autonomous obstacle avoidance with ROS 2 under Linux Ubuntu. Custom controller PCB running ESP-NOW and UART serial communication.",
       image: "images/rover-lidar.jpg",
       tags: ["ROS 2", "Nav2", "LIDAR", "Linux", "C++"]
     },
     {
       title: "Push-Pull Tube Audio Amplifier",
+      type: "personal",
       category: "Analog & High Voltage",
-      description: "Schematic design and dual-layer PCB layout under KiCad for a vacuum tube audio amplifier (ECC83 preamp, EL34 power stages). Managed high-voltage creepage, trace isolation, manual THT soldering, and bench instrumentation checks.",
+      description: "Schematic capture and dual-layer KiCad PCB routing for a high-voltage vacuum tube amplifier (ECC83 preamp, EL34 power stage). Dielectric insulation checks and manual THT soldering.",
       image: "images/tube-amp.jpg",
       tags: ["KiCad", "High Voltage", "Analog", "Audio"]
     },
     {
-      title: "3D CAD Design & Rapid Prototyping",
-      category: "Freelance Engineering",
-      description: "High-precision 3D mechanical modeling in Fusion 360 and SolidWorks (custom hardware enclosures, scale architectural replicas) combined with tuned FDM additive manufacturing (Raise3D, Bambu Lab).",
+      title: "Bookshelf Speakers & Active Subwoofer",
+      type: "personal",
+      category: "Electroacoustics & Woodworking",
+      description: "Custom bass-reflex acoustic enclosure design, WinISD resonance tuning, passive 3-way crossover calculation, and internal acoustic dampening for linear frequency response.",
+      image: "images/speakers.jpg",
+      tags: ["WinISD", "Acoustics", "3D CAD", "Analog"]
+    },
+    {
+      title: "3D CAD Modeling & Rapid Prototyping",
+      type: "freelance",
+      category: "Freelance Engineering (Fiverr)",
+      description: "High-precision 3D mechanical modeling in Fusion 360 and SolidWorks (custom electronics housings, scale architectural replicas) paired with calibrated FDM 3D printing.",
       image: "images/fiverr-cad.jpg",
       tags: ["Fusion 360", "SolidWorks", "3D Printing", "FDM"]
     }
   ];
 
   // ---------------------------------------------------------------------------
-  // RENDER CARDS
+  // 2. RENDER FUNCTION
   // ---------------------------------------------------------------------------
   const container = document.getElementById('projects-container');
   const placeholderSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' fill='%231e293b'><rect width='100%' height='100%'/><text x='50%' y='50%' fill='%2394a3b8' font-family='sans-serif' font-size='14' text-anchor='middle' dy='.3em'>Image Pending</text></svg>";
 
+  function renderProjects(filter = 'all') {
+    container.innerHTML = '';
+
+    const filtered = filter === 'all' 
+      ? projects 
+      : projects.filter(p => p.type === filter);
+
+    filtered.forEach(project => {
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      const tagsHtml = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+      card.innerHTML = `
+        <div class="card-img-wrapper" data-full="${project.image}">
+          <img src="${project.image}" alt="${project.title}" class="card-img" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-header">
+            <span class="card-tagline">${project.category}</span>
+            <h3 class="card-title">${project.title}</h3>
+          </div>
+          <p class="card-desc">${project.description}</p>
+          <div class="tags">${tagsHtml}</div>
+        </div>
+      `;
+
+      const imgElement = card.querySelector('.card-img');
+      imgElement.addEventListener('error', () => {
+        imgElement.src = placeholderSvg;
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 3. FILTER BUTTONS LOGIC
+  // ---------------------------------------------------------------------------
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProjects(btn.getAttribute('data-filter'));
+    });
+  });
+
+  renderProjects('all');
+
+  // ---------------------------------------------------------------------------
+  // RENDER CARDS
+  // ---------------------------------------------------------------------------
+  
   projects.forEach(project => {
     const card = document.createElement('article');
     card.className = 'card';

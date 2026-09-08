@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "academic",
       category: "ARECE Autonomous Racing",
       description: "Hardware design for an autonomous vehicle CAN interface: regulated power stage (7-40V to 3.3V), TVS protections, SN65 transceiver, and ESP32. Multi-node testbench validation.",
-      image: "images/can-bus.jpg",
+      image: "images/CAN_bus(1).png",
       tags: ["KiCad", "ESP32", "CAN Bus", "Testbench"]
     },
     {
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "personal",
       category: "Electroacoustics & Woodworking",
       description: "Custom bass-reflex acoustic enclosure design, WinISD resonance tuning, passive 3-way crossover calculation, and internal acoustic dampening for linear frequency response.",
-      image: "images/speakers.jpg",
+      image: "images/Bookshelf_speaker.jpg",
       tags: ["WinISD", "Acoustics", "3D CAD", "Analog"]
     },
     {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
       description: "High-precision 3D mechanical modeling in Fusion 360 and SolidWorks (custom electronics housings, scale architectural replicas) paired with calibrated FDM 3D printing.",
-      image: "images/fiverr-cad.jpg",
+      image: "images/House_fiverr(1).png",
       tags: ["Fusion 360", "SolidWorks", "3D Printing", "FDM"]
     }
   ];

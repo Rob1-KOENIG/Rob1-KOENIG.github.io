@@ -334,3 +334,137 @@ footer {
     font-size: 1.2rem;
   }
 }
+
+/* =========================================
+   MODAL (DÉTAIL DU PROJET)
+   ========================================= */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-container {
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-container {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--accent);
+}
+
+.modal-header {
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.modal-category {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  border: none; /* Override du h2 classique */
+  padding: 0;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Grille sur Desktop : Images à gauche, Texte à droite */
+@media (min-width: 800px) {
+  .modal-body {
+    grid-template-columns: 1.2fr 1fr;
+  }
+  
+  .modal-text-content {
+    position: sticky;
+    top: 2rem; /* Permet au texte de rester visible pendant que les images défilent */
+    height: max-content;
+  }
+}
+
+.modal-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-gallery img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  object-fit: cover;
+}
+
+.modal-text h3 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.5rem 0;
+  color: var(--text);
+}
+
+.modal-text p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.modal-text ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+/* Empêcher le scroll du body quand la modale est ouverte */
+body.modal-open {
+  overflow: hidden;
+}

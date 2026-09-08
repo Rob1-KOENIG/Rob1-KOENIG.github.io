@@ -483,17 +483,19 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProjects('all');
 
   // ---------------------------------------------------------------------------
-  // 4. MODAL LOGIC (Détail du projet)
+  // 4. MODAL LOGIC (Détail du projet & Galerie interactive)
   // ---------------------------------------------------------------------------
   const modal = document.getElementById('project-modal');
   const modalClose = document.getElementById('modal-close');
   
-  // Éléments de la modale
   const mCategory = document.getElementById('modal-category');
   const mTitle = document.getElementById('modal-title');
   const mTags = document.getElementById('modal-tags');
   const mGallery = document.getElementById('modal-gallery');
   const mText = document.getElementById('modal-text');
+
+  let currentGallery = [];
+  let currentImageIndex = 0;
 
   // Ouvrir la modale
   container.addEventListener('click', (e) => {
@@ -503,18 +505,77 @@ document.addEventListener('DOMContentLoaded', () => {
       const project = projects.find(p => p.id === projectId);
       
       if (project) {
-        // Remplissage du texte
+        // 1. Remplissage du texte
         mCategory.textContent = project.category;
         mTitle.textContent = project.title;
         mTags.innerHTML = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
         mText.innerHTML = project.longDescription;
 
-        // Remplissage de la galerie
-        mGallery.innerHTML = project.gallery.map(imgSrc => 
-          `<img src="${imgSrc}" loading="lazy" alt="${project.title}">`
-        ).join('');
+        // 2. Préparation de la galerie
+        currentGallery = project.gallery || [project.image];
+        currentImageIndex = 0;
+        
+        let galleryHtml = '';
 
-        // Afficher la modale et bloquer le scroll du fond
+        // Si on a plusieurs images, on affiche les flèches et les miniatures
+        if (currentGallery.length > 1) {
+          galleryHtml = `
+            <div class="gallery-main">
+              <button class="gallery-nav prev" id="gallery-prev">❮</button>
+              <img src="${currentGallery[0]}" id="gallery-main-img" alt="${project.title}">
+              <button class="gallery-nav next" id="gallery-next">❯</button>
+            </div>
+            <div class="gallery-thumbnails" id="gallery-thumbnails">
+              ${currentGallery.map((src, idx) => `
+                <img src="${src}" class="thumb ${idx === 0 ? 'active' : ''}" data-index="${idx}" alt="Miniature ${idx + 1}">
+              `).join('')}
+            </div>
+          `;
+        } else {
+          // Une seule image, pas besoin de navigation
+          galleryHtml = `
+            <div class="gallery-main">
+              <img src="${currentGallery[0]}" id="gallery-main-img" alt="${project.title}">
+            </div>
+          `;
+        }
+
+        mGallery.innerHTML = galleryHtml;
+
+        // 3. Attacher les événements de navigation (si multiples images)
+        if (currentGallery.length > 1) {
+          const mainImg = document.getElementById('gallery-main-img');
+          const prevBtn = document.getElementById('gallery-prev');
+          const nextBtn = document.getElementById('gallery-next');
+          const thumbs = mGallery.querySelectorAll('.thumb');
+
+          const updateGalleryView = (index) => {
+            currentImageIndex = index;
+            mainImg.src = currentGallery[currentImageIndex];
+            thumbs.forEach((t, i) => {
+              if (i === currentImageIndex) t.classList.add('active');
+              else t.classList.remove('active');
+            });
+          };
+
+          prevBtn.addEventListener('click', () => {
+            let newIndex = (currentImageIndex - 1 + currentGallery.length) % currentGallery.length;
+            updateGalleryView(newIndex);
+          });
+
+          nextBtn.addEventListener('click', () => {
+            let newIndex = (currentImageIndex + 1) % currentGallery.length;
+            updateGalleryView(newIndex);
+          });
+
+          thumbs.forEach(thumb => {
+            thumb.addEventListener('click', (ev) => {
+              updateGalleryView(parseInt(ev.target.getAttribute('data-index')));
+            });
+          });
+        }
+
+        // 4. Afficher la modale avec animation
         modal.classList.add('active');
         document.body.classList.add('modal-open');
       }
@@ -529,16 +590,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   modalClose.addEventListener('click', closeModal);
   
-  // Fermer si clic en dehors du conteneur de la modale
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
   });
   
-  // Fermer avec la touche Échap
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    
+    // Navigation au clavier dans la galerie (flèches gauche/droite)
+    if (modal.classList.contains('active') && currentGallery.length > 1) {
+      if (e.key === 'ArrowLeft') document.getElementById('gallery-prev').click();
+      if (e.key === 'ArrowRight') document.getElementById('gallery-next').click();
+    }
   });
-
   // ---------------------------------------------------------------------------
   // RENDER CARDS
   // ---------------------------------------------------------------------------

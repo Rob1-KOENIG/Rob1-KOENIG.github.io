@@ -336,7 +336,7 @@ footer {
 }
 
 /* =========================================
-   MODAL (DÉTAIL DU PROJET)
+   MODAL (DÉTAIL DU PROJET) & ANIMATIONS
    ========================================= */
 .modal-overlay {
   display: none;
@@ -368,12 +368,19 @@ footer {
   position: relative;
   display: flex;
   flex-direction: column;
-  transform: translateY(20px);
-  transition: transform 0.3s ease;
+  /* État initial avant l'animation */
+  transform: scale(0.95) translateY(20px);
+  opacity: 0;
 }
 
+/* L'animation pop/slide fluide quand la modale s'ouvre */
 .modal-overlay.active .modal-container {
-  transform: translateY(0);
+  animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .modal-close {
@@ -410,7 +417,7 @@ footer {
   font-size: 1.8rem;
   color: var(--text);
   margin-bottom: 1rem;
-  border: none; /* Override du h2 classique */
+  border: none;
   padding: 0;
 }
 
@@ -421,30 +428,96 @@ footer {
   padding: 2rem;
 }
 
-/* Grille sur Desktop : Images à gauche, Texte à droite */
 @media (min-width: 800px) {
   .modal-body {
     grid-template-columns: 1.2fr 1fr;
   }
-  
   .modal-text-content {
     position: sticky;
-    top: 2rem; /* Permet au texte de rester visible pendant que les images défilent */
+    top: 2rem;
     height: max-content;
   }
 }
 
+/* --- DESIGN DE LA GALERIE --- */
 .modal-gallery {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.modal-gallery img {
+/* Image principale avec flèches */
+.gallery-main {
+  position: relative;
   width: 100%;
   border-radius: 8px;
+  overflow: hidden;
+  background: #000;
   border: 1px solid var(--card-border);
+}
+
+.gallery-main img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.gallery-nav:hover {
+  background: var(--accent);
+  color: #000;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-nav.prev { left: 10px; }
+.gallery-nav.next { right: 10px; }
+
+/* Miniatures en bas */
+.gallery-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--card-border) transparent;
+}
+
+.gallery-thumbnails img {
+  width: 80px;
+  height: 60px;
   object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.4;
+  border: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.gallery-thumbnails img:hover {
+  opacity: 0.8;
+}
+
+.gallery-thumbnails img.active {
+  opacity: 1;
+  border-color: var(--accent);
 }
 
 .modal-text h3 {
@@ -464,7 +537,6 @@ footer {
   color: var(--text-muted);
 }
 
-/* Empêcher le scroll du body quand la modale est ouverte */
 body.modal-open {
   overflow: hidden;
 }

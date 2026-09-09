@@ -57,10 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>Validation</h3>
         <p>The system was validated on a testbench with three interconnected nodes, analyzing the CAN frames with a CAN-Analyzer software to ensure reliable communication despite simulated voltage drops.</p>
       `,
-      image: "images/CAN_bus(1).png",
+      image: "images/ARECE/1.jpg",
       gallery: [
-        "images/CAN_bus(1).png",
-        "images/placeholder-1.jpg"
+        "images/ARECE/1.jpg",
+        "images/ARECE/2.jpg",
+        "images/ARECE/3.jpg",
+        "images/ARECE/4.jpg"
       ],
       tags: ["KiCad", "ESP32", "CAN Bus", "Testbench"]
     },
@@ -80,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Technical_project/1.jpg",
       gallery: [
+        "images/Technical_project/1.jpg",
         "images/Technical_project/2.JPG",
         "images/Technical_project/3.JPG",
         "images/Technical_project/10.jpg",
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/OPENCV_Rover/1.jpg",
       gallery: [
+        "images/OPENCV_Rover/1.jpg",
         "images/OPENCV_Rover/2.jpg",
         "images/OPENCV_Rover/3.jpg",
         "images/OPENCV_Rover/4.jpg"
@@ -145,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/FlapicBird/1.png",
       gallery: [
+        "images/FlapicBird/1.png",
         "images/FlapicBird/3.png",
         "images/FlapicBird/4.png"
       ],
@@ -166,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Neural_speech/1.jpg",
       gallery: [
+        "images/Neural_speech/1.jpg",
         "images/Neural_speech/2.jpg",
         "images/Neural_speech/3.jpg",
         "images/Neural_speech/4.jpg"
@@ -188,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Game_of_life/1.png",
       gallery: [
+        "images/Game_of_life/1.png",
         "images/Game_of_life/2.png",
         "images/Game_of_life/3.png"
       ],
@@ -225,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Allegro/1.png",
       gallery: [
+        "images/Allegro/1.png",
         "images/Allegro/2.png",
         "images/Allegro/3.png",
         "images/Allegro/4.png",
@@ -246,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Carpool/1.png",
       gallery: [
+        "images/Carpool/1.png",
         "images/Carpool/2.png",
         "images/Carpool/3.png",
         "images/Carpool/4.png"
@@ -266,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/theme_park/1.png",
       gallery: [
+        "images/theme_park/1.png",
         "images/theme_park/2.png",
         "images/theme_park/3.png"
       ],
@@ -285,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/FertiLyon/1.png",
       gallery: [
+        "images/FertiLyon/1.png",
         "images/FertiLyon/2.png",
         "images/FertiLyon/3.png",
         "images/FertiLyon/4.png"
@@ -328,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/speakers/1.jpg",
       gallery: [
+        "images/speakers/1.jpg",
         "images/speakers/2.jpg",
         "images/speakers/3.jpg",
         "images/speakers/4.jpg",
@@ -349,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/tape-recorder/1.png",
       gallery: [
+        "images/tape-recorder/1.png",
         "images/tape-recorder/2.jpg",
         "images/tape-recorder/3.jpg",
         "images/tape-recorder/4.jpg",
@@ -370,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Reel_to_reel/1.png",
       gallery: [
+        "images/Reel_to_reel/1.png",
         "images/Reel_to_reel/2.png",
         "images/Reel_to_reel/3.png",
         "images/Reel_to_reel/4.png"
@@ -390,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Fiverr_houses/1.png",
       gallery: [
+        "images/Fiverr_houses/1.png",
         "images/Fiverr_houses/2.png",
         "images/Fiverr_houses/3.png",
         "images/Fiverr_houses/4.png",
@@ -411,6 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `,
       image: "images/Banana_fiverr/3.png",
       gallery: [
+        "images/Banana_fiverr/3.png",
         "images/Banana_fiverr/1.png",
         "images/Banana_fiverr/2.png",
         "images/Banana_fiverr/4.png"

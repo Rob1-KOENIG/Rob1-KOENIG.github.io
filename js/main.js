@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "images/speakers/4.jpg",
         "images/speakers/5.jpg"
       ],
-      tags: ["WinISD", "Acoustics", "3D CAD", "Analog"]
+      tags: ["WinISD", "Acoustics", "3D CAD", "Analog", "Woodworking"]
     },
     {
       id: "tape-recorder",
@@ -432,6 +432,74 @@ document.addEventListener('DOMContentLoaded', () => {
         "images/Banana_fiverr/4.png"
       ],
       tags: ["Fusion 360", "Acoustics", "WinISD"]
+    },
+    {
+      id: "portal-turret-speaker",
+      title: 'Custom "Portal Turret" Wall Speaker',
+      type: "freelance",
+      category: "Freelance Engineering (Fiverr)",
+      shortDescription: "Designed multiple unique 1-way and 2-way wall-mountable speaker concepts for a client, culminating in the selection of a 'Portal Turret' inspired design.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>A two-week freelance design sprint for a Fiverr client who requested out-of-the-box, highly unique concepts for wall-mountable 1-way and 2-way speaker enclosures.</p>
+        <h3>Design Iterations</h3>
+        <p>The goal was to break away from traditional boxy speakers. I modeled several radical aesthetic concepts in Fusion 360, ensuring that each 3D-printable geometry still respected the internal acoustic volumes and mounting constraints required for the selected audio drivers.</p>
+        <h3>Final Selection</h3>
+        <p>Among the various proposals, the client decided to move forward with a design heavily inspired by the iconic 'Portal Turret'. The final model seamlessly integrates the acoustic components while maintaining the required wall-mounting functionality and delivering a striking visual appeal.</p>
+      `,
+      image: "images/Fiverr_speaker_designs/1.png",
+      gallery: [
+        "images/Fiverr_speaker_designs/1.png",
+        "images/Fiverr_speaker_designs/2.png",
+        "images/Fiverr_speaker_designs/3.png",
+        "images/Fiverr_speaker_designs/4.png",
+        "images/Fiverr_speaker_designs/5.png"
+      ],
+      tags: ["Fusion 360", "Product Design", "Acoustics", "3D Printing"]
+    },
+    {
+      id: "turntable-horn-cabinet",
+      title: "Custom Turntable & Horn Speaker Cabinet",
+      type: "freelance",
+      category: "Freelance Engineering (Fiverr)",
+      shortDescription: "Designed an all-in-one audio cabinet featuring a vintage-style horn tweeter, mid/bass drivers, a built-in 3-channel amplifier, and a flush-mounted modern turntable.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>A freelance commission to design a premium, all-in-one acoustic piece of furniture that seamlessly blends vintage gramophone aesthetics with modern high-fidelity audio engineering.</p>
+        <h3>Acoustic & Mechanical Design</h3>
+        <p>The cabinet enclosure was precisely modeled to house dedicated mid-range and bass drivers in optimized acoustic volumes. For the high frequencies, I integrated a tweeter mounted inside a classic, vintage-style horn, serving as both a visual centerpiece and an acoustic waveguide.</p>
+        <h3>Hardware Integration</h3>
+        <p>The top plate was custom-engineered to flush-mount a modern turntable, creating a sleek, integrated look. Additionally, the internal structure was designed to accommodate and properly ventilate a built-in 3-channel amplifier, resulting in a complete, standalone plug-and-play audio system.</p>
+      `,
+      image: "images/Fiverr_turntable/1.png",
+      gallery: [
+        "images/Fiverr_turntable/1.png",
+        "images/Fiverr_turntable/2.png",
+        "images/Fiverr_turntable/3.png",
+        "images/Fiverr_turntable/4.png"
+      ],
+      tags: ["Fusion 360", "Acoustics", "Product Design", "Audio"]
+    },
+    {
+      id: "water-rocket-fc",
+      title: "Water Rocket Flight Controller",
+      type: "personal",
+      category: "Aerospace & Embedded Systems",
+      shortDescription: "Custom 40mm circular PCB designed in KiCad to control a water rocket's parachute deployment at apogee, featuring an ESP32-C3, LiPo charging, and a BMP280 altimeter.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>I designed an ultra-compact, lightweight embedded flight controller for a custom water rocket to save space and minimize payload weight. The system actively monitors altitude and detects the rocket's apogee to automatically trigger a servo motor, unlocking the nose cone and deploying the parachute.</p>
+        <h3>Hardware Engineering</h3>
+        <p>The circuit was designed and routed in KiCad on a highly constrained 40mm circular PCB. It integrates an ESP32-C3-WROOM-02 microcontroller, a BMP280 barometric pressure sensor (I2C) for altitude tracking, and an onboard 1S LiPo power management system featuring USB-C charging (MCP73831) and a 3.3V LDO regulator (AP2112K). The board also provides a direct VBAT-powered 3-pin servo output, an RGB debug LED, and UART pads for programming.</p>
+        <h3>PCB Routing Constraints</h3>
+        <p>To ensure high reliability, specific layout constraints were strictly enforced. The BMP280 altimeter was placed at the very edge of the board, far from any heat-generating components to maintain reading accuracy. Additionally, the ESP32 antenna was positioned with a strict copper keep-out zone across all layers to ensure optimal RF performance.</p>
+      `,
+      image: "images/Fiverr_rocket/1.png",
+      gallery: [
+        "images/Fiverr_rocket/1.png",
+        "images/Fiverr_rocket/2.png"
+      ],
+      tags: ["KiCad", "ESP32-C3", "Aerospace", "PCB Design"]
     }
   ];
 

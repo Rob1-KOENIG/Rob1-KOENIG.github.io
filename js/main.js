@@ -82,9 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
       gallery: [
         "images/Technical_project/2.JPG",
         "images/Technical_project/3.JPG",
-        "images/Technical_project/7.PNG",
-        "images/Technical_project/8.jpg",
-        "images/Technical_project/9.jpg",
         "images/Technical_project/10.jpg",
         "images/Technical_project/11.jpg"
       ],

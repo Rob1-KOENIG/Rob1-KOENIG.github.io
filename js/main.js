@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: "water-rocket-fc",
       title: "Water Rocket Flight Controller",
-      type: "personal",
+      type: "freelance",
       category: "Aerospace & Embedded Systems",
       shortDescription: "Custom 40mm circular PCB designed in KiCad to control a water rocket's parachute deployment at apogee, featuring an ESP32-C3, LiPo charging, and a BMP280 altimeter.",
       longDescription: `
@@ -670,4 +670,58 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight') document.getElementById('gallery-next').click();
     }
   });
+
+// ---------------------------------------------------------------------------
+  // 5. SCROLL REVEAL ANIMATIONS
+  // ---------------------------------------------------------------------------
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        // Ajoute un léger délai (stagger) basé sur l'index pour que les cartes apparaissent une par une
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, index * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Fonction pour attacher l'observateur aux cartes après chaque filtrage
+  function initScrollReveal() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      // État initial (caché et descendu)
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      observer.observe(card);
+    });
+  }
+
+  // Modifie ta fonction renderProjects existante pour ajouter initScrollReveal à la fin :
+  const originalRenderProjects = renderProjects;
+  renderProjects = function(filter = 'all') {
+    originalRenderProjects(filter); // Appelle l'ancienne logique
+    initScrollReveal(); // Lance l'animation
+  };
+  
+  // Ajouter la classe css dynamiquement par le JS
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .card.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Relancer pour la première fois
+  renderProjects('all');
+
 });

@@ -11,35 +11,35 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Fond animé High-Tech (Aurora) -->
+  <div class="aurora-bg"></div>
 
   <div class="container">
-    <header>
-      <h1>Robin Koenig</h1>
-      <div class="role">// Embedded Systems & Hardware Engineer</div>
-      <p class="bio">
-        Engineering student at ECE Paris. Focused on hardware design (schematic capture, KiCad PCB layout), low-level firmware development (C/C++, Python), and rapid prototyping (FDM 3D printing, testbench validation).
-      </p>
-      <div class="actions">
-        <a href="Portefolio V2.0 - Robin KOENIG.pdf" class="btn btn-primary" target="_blank">📄 Download Portfolio (PDF)</a>
-        <a href="https://www.linkedin.com/in/robin-koenig-915526179/" class="btn btn-outline" target="_blank">LinkedIn</a>
-        <a href="https://fr.fiverr.com/robin_koenig/" class="btn btn-outline" target="_blank">Fiverr</a>
-        <a href="mailto:robin.koenig@edu.ece.fr" class="btn btn-outline">Email</a>
-      </div> 
+    <header class="hero">
+      <div class="hero-profile">
+        <!-- Mets ta photo de profil ici (recadrée en carré) -->
+        <img src="images/profile.jpg" alt="Robin Koenig" class="profile-img">
+        <div class="profile-glow"></div>
+      </div>
+      <div class="hero-content">
+        <h1>Robin <span class="gradient-text">Koenig</span></h1>
+        <div class="role">// Embedded Systems & Hardware Engineer</div>
+        <p class="bio">
+          Étudiant ingénieur à l'ECE Paris. Spécialisé en conception de cartes électroniques (KiCad), firmware bas niveau (C/C++, Python) et prototypage rapide (impression 3D, bancs de test).
+        </p>
+        <div class="actions">
+          <a href="Portfolio.pdf" class="btn btn-primary" target="_blank">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            Portfolio Complet (PDF)
+          </a>
+          <a href="https://linkedin.com/in/ton-profil" class="btn btn-outline" target="_blank">LinkedIn</a>
+          <a href="https://fiverr.com/ton-profil" class="btn btn-outline" target="_blank">Fiverr</a>
+          <a href="mailto:robin.koenig@edu.ece.fr" class="btn btn-outline">Email</a>
+        </div>
+      </div>
     </header>
 
     <section>
-      <div class="filters-container">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="academic">Academic Projects</button>
-        <button class="filter-btn" data-filter="personal">Personal Projects</button>
-        <button class="filter-btn" data-filter="freelance">Freelance / Fiverr</button>
-      </div>
-
-      <h2>Featured Projects</h2>
-      <div class="grid" id="projects-container">
-        <!-- Projects rendered dynamically by main.js -->
-      </div>
-    </section>
 
     <footer>
       <span>Robin Koenig — Paris, France</span>

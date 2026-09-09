@@ -683,7 +683,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        // Ajoute un léger délai (stagger) basé sur l'index pour que les cartes apparaissent une par une
         setTimeout(() => {
           entry.target.classList.add('visible');
         }, index * 100);
@@ -692,11 +691,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, observerOptions);
 
-  // Fonction pour attacher l'observateur aux cartes après chaque filtrage
   function initScrollReveal() {
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
-      // État initial (caché et descendu)
       card.style.opacity = '0';
       card.style.transform = 'translateY(30px)';
       card.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
@@ -704,14 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Modifie ta fonction renderProjects existante pour ajouter initScrollReveal à la fin :
-  const originalRenderProjects = renderProjects;
-  renderProjects = function(filter = 'all') {
-    originalRenderProjects(filter); // Appelle l'ancienne logique
-    initScrollReveal(); // Lance l'animation
-  };
-  
-  // Ajouter la classe css dynamiquement par le JS
+  // Inject CSS for the visible class
   const style = document.createElement('style');
   style.innerHTML = `
     .card.visible {
@@ -721,7 +711,15 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(style);
 
-  // Relancer pour la première fois
-  renderProjects('all');
+  // Écouteur pour appliquer l'animation après CHAQUE clic sur un filtre
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Un court délai permet au DOM de se mettre à jour avant de relancer l'observateur
+      setTimeout(initScrollReveal, 50); 
+    });
+  });
+
+  // Appliquer l'animation pour le tout premier chargement de la page
+  initScrollReveal();
 
 });

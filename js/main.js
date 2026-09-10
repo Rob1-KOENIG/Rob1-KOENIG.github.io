@@ -509,33 +509,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('projects-container');
   const placeholderSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' fill='%231e293b'><rect width='100%' height='100%'/><text x='50%' y='50%' fill='%2394a3b8' font-family='sans-serif' font-size='14' text-anchor='middle' dy='.3em'>Image Pending</text></svg>";
 
+  // On crée TOUTES les cartes une seule fois au chargement
+  projects.forEach(project => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.setAttribute('data-type', project.type); // On ajoute l'attribut type pour le filtrage
+
+    const tagsHtml = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    card.innerHTML = `
+      <div class="card-img-wrapper" data-id="${project.id}">
+        <img src="${project.image}" alt="${project.title}" class="card-img" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <span class="card-tagline">${project.category}</span>
+          <h3 class="card-title">${project.title}</h3>
+        </div>
+        <p class="card-desc">${project.shortDescription}</p>
+        <div class="tags">${tagsHtml}</div>
+      </div>
+    `;
+
+    const imgElement = card.querySelector('.card-img');
+    imgElement.addEventListener('error', () => { imgElement.src = placeholderSvg; });
+    container.appendChild(card);
+  });
+
   function renderProjects(filter = 'all') {
-    container.innerHTML = '';
-    const filtered = filter === 'all' ? projects : projects.filter(p => p.type === filter);
-
-    filtered.forEach(project => {
-      const card = document.createElement('article');
-      card.className = 'card';
-
-      const tagsHtml = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-      card.innerHTML = `
-        <div class="card-img-wrapper" data-id="${project.id}">
-          <img src="${project.image}" alt="${project.title}" class="card-img" loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-tagline">${project.category}</span>
-            <h3 class="card-title">${project.title}</h3>
-          </div>
-          <p class="card-desc">${project.shortDescription}</p>
-          <div class="tags">${tagsHtml}</div>
-        </div>
-      `;
-
-      const imgElement = card.querySelector('.card-img');
-      imgElement.addEventListener('error', () => { imgElement.src = placeholderSvg; });
-      container.appendChild(card);
+    const allCards = container.querySelectorAll('.card');
+    
+    allCards.forEach(card => {
+      const cardType = card.getAttribute('data-type');
+      if (filter === 'all' || cardType === filter) {
+        // Laisser CSS Grid gérer l'affichage
+        card.style.display = 'flex'; 
+      } else {
+        // Cacher complètement l'élément pour qu'il sorte du flux CSS Grid
+        card.style.display = 'none';
+      }
     });
   }
 

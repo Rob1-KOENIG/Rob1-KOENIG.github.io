@@ -15,6 +15,24 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* --- AJOUTE CE BLOC ICI : LA PALETTE THÈME CLAIR --- */
+body.light-theme {
+  --bg: #f1f5f9;
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --card-hover: rgba(2, 132, 199, 0.4);
+  --text: #0f172a;
+  --text-muted: #475569;
+  --accent: #0284c7;
+  --accent-glow: rgba(2, 132, 199, 0.3);
+  --accent-dim: rgba(2, 132, 199, 0.12);
+}
+
+/* Transition très douce pour le passage Jour/Nuit sur toute la page */
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 ::-webkit-scrollbar { width: 8px; }

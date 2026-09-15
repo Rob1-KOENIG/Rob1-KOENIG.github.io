@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeIcon = document.getElementById('theme-icon');
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
+  // FIX: le CSS stylise ce bouton via la classe .fab-theme (position fixe,
+  // cercle, ombre...). On s'assure qu'elle est bien présente même si le HTML
+  // ne l'a pas mise sur l'élément #theme-toggle.
+  themeToggleBtn?.classList.add('fab-theme');
+
   const getInitialTheme = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme;
@@ -38,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       applyTheme(e.matches ? 'dark' : 'light');
     }
   });
-  
+
   // ---------------------------------------------------------------------------
   // 1. DATA (Projets)
   // ---------------------------------------------------------------------------
@@ -503,235 +508,517 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  // ---------------------------------------------------------------------------
+  // ============================================================================
   // 2. RENDER CARDS & FILTERS
-  // ---------------------------------------------------------------------------
+  // ============================================================================
+
   const container = document.getElementById('projects-container');
-  const placeholderSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' fill='%231e293b'><rect width='100%' height='100%'/><text x='50%' y='50%' fill='%2394a3b8' font-family='sans-serif' font-size='14' text-anchor='middle' dy='.3em'>Image Pending</text></svg>";
 
-  // On crée TOUTES les cartes une seule fois au chargement
-  projects.forEach(project => {
+  const placeholderSvg = `data:image/svg+xml;utf8,
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="%23111111"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        fill="%23ffffff" font-size="24" font-family="Arial">
+    Image unavailable
+  </text>
+</svg>
+`;
+
+  // -----------------------------------------------------------------------------
+  // Création de toutes les cartes
+  // -----------------------------------------------------------------------------
+
+  projects.forEach((project) => {
     const card = document.createElement('article');
-    card.className = 'card';
-    card.setAttribute('data-type', project.type); // On ajoute l'attribut type pour le filtrage
 
-    const tagsHtml = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    card.className = 'card';
+    card.setAttribute('data-type', project.type);
+
+    const tagsHtml = project.tags
+      .map((tag) => `<span class="tag">${tag}</span>`)
+      .join('');
 
     card.innerHTML = `
-      <div class="card-img-wrapper" data-id="${project.id}">
-        <img src="${project.image}" alt="${project.title}" class="card-img" loading="lazy">
+      <div
+        class="card-img-wrapper"
+        data-id="${project.id}"
+      >
+        <img
+          class="card-img"
+          src="${project.image}"
+          alt="${project.title}"
+          loading="lazy"
+        >
       </div>
-      <div class="card-body">
-        <div class="card-header">
-          <span class="card-tagline">${project.category}</span>
-          <h3 class="card-title">${project.title}</h3>
+
+      <div class="card-content">
+        <span class="card-category">
+          ${project.category}
+        </span>
+
+        <h3 class="card-title">
+          ${project.title}
+        </h3>
+
+        <p class="card-description">
+          ${project.shortDescription}
+        </p>
+
+        <div class="card-tags">
+          ${tagsHtml}
         </div>
-        <p class="card-desc">${project.shortDescription}</p>
-        <div class="tags">${tagsHtml}</div>
       </div>
     `;
 
+    // Image de remplacement en cas d'erreur
     const imgElement = card.querySelector('.card-img');
-    imgElement.addEventListener('error', () => { imgElement.src = placeholderSvg; });
+
+    imgElement.addEventListener('error', () => {
+      imgElement.src = placeholderSvg;
+    });
+
     container.appendChild(card);
   });
 
+  // -----------------------------------------------------------------------------
+  // Filtrage des projets
+  // -----------------------------------------------------------------------------
+
   function renderProjects(filter = 'all') {
     const allCards = container.querySelectorAll('.card');
-    
-    allCards.forEach(card => {
+
+    allCards.forEach((card) => {
       const cardType = card.getAttribute('data-type');
+
       if (filter === 'all' || cardType === filter) {
-        // Laisser CSS Grid gérer l'affichage
-        card.style.display = 'flex'; 
+        card.style.display = 'flex';
       } else {
-        // Cacher complètement l'élément pour qu'il sorte du flux CSS Grid
         card.style.display = 'none';
       }
     });
   }
 
+  // -----------------------------------------------------------------------------
+  // Boutons de filtre
+  // -----------------------------------------------------------------------------
+
   const filterButtons = document.querySelectorAll('.filter-btn');
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderProjects(btn.getAttribute('data-filter'));
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach((btn) => {
+        btn.classList.remove('active');
+      });
+
+      button.classList.add('active');
+
+      const filter = button.getAttribute('data-filter');
+
+      renderProjects(filter);
+
+      // Relance l'animation après filtrage
+      // FIX: ce setTimeout unique suffit — il y avait un second listener
+      // identique plus bas dans le fichier qui déclenchait initScrollReveal()
+      // deux fois à chaque clic. Il a été supprimé.
+      setTimeout(initScrollReveal, 50);
     });
   });
-  
-  renderProjects('all'); // Premier rendu initial
 
-  // ---------------------------------------------------------------------------
-  // 3. MODAL LOGIC (Détail du projet & Galerie interactive)
-  // ---------------------------------------------------------------------------
+  // Affichage initial
+  renderProjects('all');
+
+
+  // ============================================================================
+  // 3. MODAL LOGIC
+  // ============================================================================
+
   const modal = document.getElementById('project-modal');
   const modalClose = document.getElementById('modal-close');
-  
+
   const mCategory = document.getElementById('modal-category');
   const mTitle = document.getElementById('modal-title');
   const mTags = document.getElementById('modal-tags');
   const mGallery = document.getElementById('modal-gallery');
   const mText = document.getElementById('modal-text');
 
+  // FIX PRINCIPAL — incohérence avec le CSS :
+  // Le style.css cible ces éléments par CLASSE (.modal-overlay, .modal-close,
+  // .modal-category, .modal-title, .modal-gallery, .modal-text ...) alors que
+  // le JS ne les récupère que par ID. Si le HTML ne portait pas déjà ces
+  // classes en plus des id, la modale n'était ni positionnée/centrée
+  // (.modal-overlay.active), ni les titres (.modal-close, .modal-category,
+  // .modal-title, .modal-gallery), ni surtout le texte des détails
+  // techniques (.modal-text h3 / p / ul, qui donnent la couleur et les
+  // marges) qui restait invisible ou mal formaté sur fond sombre.
+  // On force ces classes ici pour garantir que le CSS s'applique quoi qu'il
+  // arrive côté HTML.
+  modal?.classList.add('modal-overlay');
+  modalClose?.classList.add('modal-close');
+  mCategory?.classList.add('modal-category');
+  mTitle?.classList.add('modal-title');
+  mGallery?.classList.add('modal-gallery');
+  mText?.classList.add('modal-text');
+
   let currentGallery = [];
   let currentImageIndex = 0;
 
-  // Ouvrir la modale
-  container.addEventListener('click', (e) => {
-    const wrapper = e.target.closest('.card-img-wrapper');
-    if (wrapper) {
-      const projectId = wrapper.getAttribute('data-id');
-      const project = projects.find(p => p.id === projectId);
-      
-      if (project) {
-        // Remplissage du texte
-        mCategory.textContent = project.category;
-        mTitle.textContent = project.title;
-        mTags.innerHTML = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
-        mText.innerHTML = project.longDescription;
 
-        // Préparation de la galerie
-        currentGallery = project.gallery || [project.image];
-        currentImageIndex = 0;
-        
-        let galleryHtml = '';
+  // -----------------------------------------------------------------------------
+  // Ouverture de la modal
+  // -----------------------------------------------------------------------------
 
-        if (currentGallery.length > 1) {
-          galleryHtml = `
-            <div class="gallery-main">
-              <button class="gallery-nav prev" id="gallery-prev">❮</button>
-              <img src="${currentGallery[0]}" id="gallery-main-img" alt="${project.title}">
-              <button class="gallery-nav next" id="gallery-next">❯</button>
-            </div>
-            <div class="gallery-thumbnails" id="gallery-thumbnails">
-              ${currentGallery.map((src, idx) => `
-                <img src="${src}" class="thumb ${idx === 0 ? 'active' : ''}" data-index="${idx}" alt="Miniature ${idx + 1}">
-              `).join('')}
-            </div>
-          `;
-        } else {
-          galleryHtml = `
-            <div class="gallery-main">
-              <img src="${currentGallery[0]}" id="gallery-main-img" alt="${project.title}">
-            </div>
-          `;
-        }
+  container.addEventListener('click', (event) => {
+    const wrapper = event.target.closest('.card-img-wrapper');
 
-        mGallery.innerHTML = galleryHtml;
-
-        // Événements de navigation de la galerie
-        if (currentGallery.length > 1) {
-          const mainImg = document.getElementById('gallery-main-img');
-          const prevBtn = document.getElementById('gallery-prev');
-          const nextBtn = document.getElementById('gallery-next');
-          const thumbs = mGallery.querySelectorAll('.thumb');
-
-          const updateGalleryView = (index) => {
-            currentImageIndex = index;
-            mainImg.src = currentGallery[currentImageIndex];
-            thumbs.forEach((t, i) => {
-              if (i === currentImageIndex) t.classList.add('active');
-              else t.classList.remove('active');
-            });
-          };
-
-          prevBtn.addEventListener('click', () => {
-            let newIndex = (currentImageIndex - 1 + currentGallery.length) % currentGallery.length;
-            updateGalleryView(newIndex);
-          });
-
-          nextBtn.addEventListener('click', () => {
-            let newIndex = (currentImageIndex + 1) % currentGallery.length;
-            updateGalleryView(newIndex);
-          });
-
-          thumbs.forEach(thumb => {
-            thumb.addEventListener('click', (ev) => {
-              updateGalleryView(parseInt(ev.target.getAttribute('data-index')));
-            });
-          });
-        }
-
-        // Afficher la modale
-        modal.classList.add('active');
-        document.body.classList.add('modal-open');
-      }
+    if (!wrapper) {
+      return;
     }
+
+    const projectId = wrapper.getAttribute('data-id');
+
+    const project = projects.find(
+      (project) => String(project.id) === String(projectId)
+    );
+
+    if (!project) {
+      return;
+    }
+
+    // ---------------------------------------------------------------------------
+    // Informations principales
+    // ---------------------------------------------------------------------------
+
+    mCategory.textContent = project.category;
+    mTitle.textContent = project.title;
+
+    mTags.innerHTML = project.tags
+      .map((tag) => `<span class="tag">${tag}</span>`)
+      .join('');
+
+
+    // ---------------------------------------------------------------------------
+    // Texte + accordéon
+    // ---------------------------------------------------------------------------
+
+    mText.innerHTML = `
+      <p class="modal-short-desc">
+        ${project.shortDescription}
+      </p>
+
+      <button
+        type="button"
+        class="modal-expand-btn"
+        id="modal-expand-btn"
+        aria-expanded="false"
+      >
+        <span>Technical Details</span>
+
+        <span class="chevron" aria-hidden="true">
+          ↓
+        </span>
+      </button>
+
+      <div
+        class="modal-long-desc"
+        id="modal-long-desc"
+      >
+        <div class="modal-long-desc-inner">
+          <div>
+            ${project.longDescription}
+          </div>
+        </div>
+      </div>
+    `;
+
+
+    // ---------------------------------------------------------------------------
+    // Logique de l'accordéon
+    // ---------------------------------------------------------------------------
+
+    const expandBtn = document.getElementById('modal-expand-btn');
+    const longDesc = document.getElementById('modal-long-desc');
+    const expandSpan = expandBtn.querySelector('span');
+
+    expandBtn.addEventListener('click', () => {
+      const isExpanded = longDesc.classList.toggle('expanded');
+
+      expandBtn.classList.toggle('active', isExpanded);
+      expandBtn.setAttribute('aria-expanded', isExpanded);
+
+      expandSpan.textContent = isExpanded
+        ? 'Show Less'
+        : 'Technical Details';
+    });
+
+
+    // ---------------------------------------------------------------------------
+    // Préparation de la galerie
+    // ---------------------------------------------------------------------------
+
+    currentGallery = project.gallery?.length
+      ? project.gallery
+      : [project.image];
+
+    currentImageIndex = 0;
+
+    let galleryHtml = '';
+
+
+    // ---------------------------------------------------------------------------
+    // Galerie avec plusieurs images
+    // ---------------------------------------------------------------------------
+
+    if (currentGallery.length > 1) {
+      galleryHtml = `
+        <div class="gallery-main">
+          <button
+            type="button"
+            class="gallery-arrow gallery-prev"
+            id="gallery-prev"
+            aria-label="Previous image"
+          >
+            ❮
+          </button>
+
+          <img
+            id="gallery-main-img"
+            src="${currentGallery[0]}"
+            alt="${project.title}"
+          >
+
+          <button
+            type="button"
+            class="gallery-arrow gallery-next"
+            id="gallery-next"
+            aria-label="Next image"
+          >
+            ❯
+          </button>
+        </div>
+
+        <div class="gallery-thumbnails">
+          ${currentGallery
+            .map(
+              (src, index) => `
+                <button
+                  type="button"
+                  class="thumb ${index === 0 ? 'active' : ''}"
+                  data-index="${index}"
+                >
+                  <img
+                    src="${src}"
+                    alt="${project.title} - image ${index + 1}"
+                  >
+                </button>
+              `
+            )
+            .join('')}
+        </div>
+      `;
+    }
+
+    // ---------------------------------------------------------------------------
+    // Galerie avec une seule image
+    // ---------------------------------------------------------------------------
+
+    else {
+      galleryHtml = `
+        <div class="gallery-single">
+          <img
+            id="gallery-main-img"
+            src="${currentGallery[0]}"
+            alt="${project.title}"
+          >
+        </div>
+      `;
+    }
+
+
+    // Injection de la galerie
+    mGallery.innerHTML = galleryHtml;
+
+
+    // ---------------------------------------------------------------------------
+    // Gestion de la galerie
+    // ---------------------------------------------------------------------------
+
+    if (currentGallery.length > 1) {
+      const mainImg = document.getElementById('gallery-main-img');
+      const prevBtn = document.getElementById('gallery-prev');
+      const nextBtn = document.getElementById('gallery-next');
+      const thumbs = mGallery.querySelectorAll('.thumb');
+
+      const updateGalleryView = (index) => {
+        currentImageIndex = index;
+
+        mainImg.src = currentGallery[currentImageIndex];
+
+        thumbs.forEach((thumb, thumbIndex) => {
+          thumb.classList.toggle(
+            'active',
+            thumbIndex === currentImageIndex
+          );
+        });
+      };
+
+
+      // Image précédente
+      prevBtn.addEventListener('click', () => {
+        const newIndex =
+          (currentImageIndex - 1 + currentGallery.length) %
+          currentGallery.length;
+
+        updateGalleryView(newIndex);
+      });
+
+
+      // Image suivante
+      nextBtn.addEventListener('click', () => {
+        const newIndex =
+          (currentImageIndex + 1) %
+          currentGallery.length;
+
+        updateGalleryView(newIndex);
+      });
+
+
+      // Clic sur une miniature
+      thumbs.forEach((thumb) => {
+        thumb.addEventListener('click', () => {
+          const index = Number(
+            thumb.getAttribute('data-index')
+          );
+
+          updateGalleryView(index);
+        });
+      });
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // Affichage de la modal
+    // ---------------------------------------------------------------------------
+
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
   });
 
-  // Fermer la modale
+
+  // ============================================================================
+  // FERMETURE DE LA MODAL
+  // ============================================================================
+
   const closeModal = () => {
     modal.classList.remove('active');
     document.body.classList.remove('modal-open');
   };
 
   modalClose.addEventListener('click', closeModal);
-  
-  modal.addEventListener('click', (e) => {
-    // Si on clique sur le fond flouté, ça ferme la modale
-    if (e.target === modal) closeModal();
-  });
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-    
-    // Navigation clavier pour la galerie
-    if (modal.classList.contains('active') && currentGallery.length > 1) {
-      if (e.key === 'ArrowLeft') document.getElementById('gallery-prev').click();
-      if (e.key === 'ArrowRight') document.getElementById('gallery-next').click();
+
+
+  // Fermeture en cliquant sur le fond
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
     }
   });
 
-// ---------------------------------------------------------------------------
-  // 5. SCROLL REVEAL ANIMATIONS
-  // ---------------------------------------------------------------------------
+
+  // Fermeture avec la touche Escape + navigation clavier
+  document.addEventListener('keydown', (event) => {
+    if (!modal.classList.contains('active')) {
+      return;
+    }
+
+    // Escape
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+
+    // Galerie
+    if (currentGallery.length > 1) {
+      if (event.key === 'ArrowLeft') {
+        document.getElementById('gallery-prev')?.click();
+      }
+
+      if (event.key === 'ArrowRight') {
+        document.getElementById('gallery-next')?.click();
+      }
+    }
+  });
+
+
+  // ============================================================================
+  // 4. SCROLL REVEAL ANIMATIONS
+  // ============================================================================
+
   const observerOptions = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.1
+    threshold: 0.1,
   };
 
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
+  const observer = new IntersectionObserver(
+    (entries, observerInstance) => {
+      entries.forEach((entry, index) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
         setTimeout(() => {
           entry.target.classList.add('visible');
         }, index * 100);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
+
+        observerInstance.unobserve(entry.target);
+      });
+    },
+    observerOptions
+  );
+
+
+  // -----------------------------------------------------------------------------
+  // Initialisation du Scroll Reveal
+  // -----------------------------------------------------------------------------
 
   function initScrollReveal() {
     const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
+
+    cards.forEach((card) => {
+      // Évite de réinitialiser une carte déjà affichée
+      if (card.classList.contains('visible')) {
+        return;
+      }
+
       card.style.opacity = '0';
       card.style.transform = 'translateY(30px)';
-      card.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      card.style.transition =
+        'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+
       observer.observe(card);
     });
   }
 
-  // Inject CSS for the visible class
+
+  // -----------------------------------------------------------------------------
+  // Style de la classe .visible
+  // -----------------------------------------------------------------------------
+
   const style = document.createElement('style');
-  style.innerHTML = `
+
+  style.textContent = `
     .card.visible {
       opacity: 1 !important;
       transform: translateY(0) !important;
     }
   `;
+
   document.head.appendChild(style);
 
-  // Écouteur pour appliquer l'animation après CHAQUE clic sur un filtre
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Un court délai permet au DOM de se mettre à jour avant de relancer l'observateur
-      setTimeout(initScrollReveal, 50); 
-    });
-  });
 
-  // Appliquer l'animation pour le tout premier chargement de la page
+  // Initialisation
+  // FIX: le bloc dupliqué (deuxième forEach sur filterButtons +
+  // deuxième appel à initScrollReveal()) a été retiré — le premier appel
+  // ci-dessous, combiné au setTimeout déjà présent dans le listener de
+  // filtre plus haut, suffit amplement.
   initScrollReveal();
-
 });

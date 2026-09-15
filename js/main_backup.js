@@ -746,65 +746,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const collapseBtn = document.getElementById('modal-collapse-btn');
 
     // Le conteneur .desc-swap anime sa propre hauteur pour accompagner le
-    // panneau actif (les deux panneaux sont en position absolute — nécessaire
-    // pour l'effet de balayage — donc le conteneur ne connaît pas
-    // naturellement sa hauteur : on la calcule nous-mêmes à partir du
-    // panneau qui doit être visible).
-    let activePanel = panelShort;
-
-    const syncSwapHeight = () => {
-      descSwap.style.height = `${activePanel.scrollHeight}px`;
+    // panneau actif (les deux panneaux sont en position absolute, donc le
+    // conteneur ne connaît pas naturellement sa hauteur : on la calcule
+    // nous-mêmes à partir du panneau qui doit être visible).
+    const setSwapHeight = (panel) => {
+      requestAnimationFrame(() => {
+        descSwap.style.height = `${panel.scrollHeight}px`;
+      });
     };
 
-    // Mesure toujours DIFFÉRÉE au frame suivant. C'est essentiel : à
-    // l'instant où ce code s'exécute, la modale n'a pas encore reçu sa
-    // classe .active (ça arrive plus loin dans la fonction), donc
-    // scrollHeight vaudrait 0 si on mesurait tout de suite — ce qui
-    // coupait le bas de la description courte à l'ouverture.
-    requestAnimationFrame(syncSwapHeight);
-
-    const animateSwapTo = (panel) => {
-      // Figer la hauteur actuelle avant de changer de panneau actif, pour
-      // avoir un point de départ propre à l'animation.
-      const startHeight = descSwap.getBoundingClientRect().height;
-      descSwap.style.height = `${startHeight}px`;
-      void descSwap.offsetHeight; // force le navigateur à appliquer la valeur
-
-      activePanel = panel;
-      requestAnimationFrame(syncSwapHeight);
-    };
+    // Hauteur initiale = celle de la description courte
+    setSwapHeight(panelShort);
 
     expandBtn.addEventListener('click', () => {
       descSwap.classList.add('is-detailed');
-      animateSwapTo(panelDetailed);
+      setSwapHeight(panelDetailed);
     });
 
     collapseBtn.addEventListener('click', () => {
       descSwap.classList.remove('is-detailed');
-      animateSwapTo(panelShort);
-    });
-
-    // Filet de sécurité : si une police custom (ex. Inter, chargée depuis
-    // le web) finit de se charger juste après cette mesure, le texte peut
-    // très légèrement changer de hauteur. On recalcule alors la hauteur
-    // sans animation pour ne jamais laisser le contenu déborder.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        descSwap.style.transition = 'none';
-        syncSwapHeight();
-        void descSwap.offsetHeight;
-        descSwap.style.transition = '';
-      });
-    }
-
-    // Même logique lors d'un redimensionnement de la fenêtre (le texte
-    // peut se réenrouler sur un nombre de lignes différent).
-    window.addEventListener('resize', () => {
-      if (!modal.classList.contains('active')) return;
-      descSwap.style.transition = 'none';
-      syncSwapHeight();
-      void descSwap.offsetHeight;
-      descSwap.style.transition = '';
+      setSwapHeight(panelShort);
     });
 
 

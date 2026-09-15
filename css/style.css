@@ -213,6 +213,7 @@ h2::after {
 }
 
 .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+.card-category { margin-bottom: 0.75rem; }
 .card-category { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.3rem; }
 .card-title { font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.3; }
 .card-description { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5; flex-grow: 1; }
@@ -354,7 +355,8 @@ footer { margin-top: 4rem; border-top: 1px solid var(--card-border); padding-top
 
 
 /* =========================================
-   BOUTON DÉROULANT DANS LA MODALE (ACCORDÉON)
+   SWAP DESCRIPTION COURTE <-> DETAILLEE
+   (effet de balayage vers le haut)
    ========================================= */
 .modal-short-desc {
   font-size: 1.05rem;
@@ -363,7 +365,47 @@ footer { margin-top: 4rem; border-top: 1px solid var(--card-border); padding-top
   line-height: 1.6;
 }
 
-.modal-expand-btn {
+/* Conteneur qui empile les deux panneaux et anime sa propre hauteur
+   pour accompagner le changement de contenu */
+.desc-swap {
+  position: relative;
+  overflow: hidden;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.desc-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease;
+}
+
+/* Etat par defaut : le panneau court est visible, le detaille est
+   pret juste en-dessous (hors champ), invisible et non cliquable */
+.desc-panel-detailed {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Quand .is-detailed est actif sur le conteneur : le court "sort" par
+   le haut, le detaille "entre" par le bas -> effet de balayage vers le haut */
+.desc-swap.is-detailed .desc-panel-short {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.desc-swap.is-detailed .desc-panel-detailed {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-expand-btn,
+.modal-collapse-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -378,48 +420,40 @@ footer { margin-top: 4rem; border-top: 1px solid var(--card-border); padding-top
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 0.5rem;
 }
 
-body.light-theme .modal-expand-btn {
+body.light-theme .modal-expand-btn,
+body.light-theme .modal-collapse-btn {
   background: rgba(0, 0, 0, 0.03);
 }
 
-.modal-expand-btn:hover {
+.modal-expand-btn:hover,
+.modal-collapse-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-dim);
 }
 
+.modal-collapse-btn {
+  margin-bottom: 1rem;
+}
+
 .modal-expand-btn .chevron {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s ease;
 }
 
-.modal-expand-btn.active .chevron {
-  transform: rotate(-180deg);
+.modal-detailed-content h3 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.5rem 0;
+  color: var(--text);
 }
-
-/* 
-  La magie de l'animation d'ouverture !
-  On utilise grid-template-rows pour animer une hauteur "auto" de façon fluide
-*/
-.modal-long-desc {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+.modal-detailed-content h3:first-child { margin-top: 0; }
+.modal-detailed-content p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
 }
-
-.modal-long-desc-inner {
-  overflow: hidden;
-}
-
-/* Ligne de séparation et espacement à l'intérieur de l'accordéon */
-.modal-long-desc-inner > div {
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
-  margin-top: 0.5rem;
-}
-
-.modal-long-desc.expanded {
-  grid-template-rows: 1fr;
+.modal-detailed-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
 }

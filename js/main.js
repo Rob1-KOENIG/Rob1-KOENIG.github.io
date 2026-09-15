@@ -697,33 +697,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ---------------------------------------------------------------------------
-    // Texte + accordéon
+    // Texte : description courte + description détaillée
+    // (deux panneaux empilés, basculés avec un effet de balayage vers le haut)
     // ---------------------------------------------------------------------------
 
     mText.innerHTML = `
-      <p class="modal-short-desc">
-        ${project.shortDescription}
-      </p>
+      <div class="desc-swap" id="desc-swap">
+        <div class="desc-panel desc-panel-short" id="desc-panel-short">
+          <p class="modal-short-desc">
+            ${project.shortDescription}
+          </p>
 
-      <button
-        type="button"
-        class="modal-expand-btn"
-        id="modal-expand-btn"
-        aria-expanded="false"
-      >
-        <span>Technical Details</span>
+          <button
+            type="button"
+            class="modal-expand-btn"
+            id="modal-expand-btn"
+          >
+            <span>Voir les détails techniques</span>
+            <span class="chevron" aria-hidden="true">↑</span>
+          </button>
+        </div>
 
-        <span class="chevron" aria-hidden="true">
-          ↓
-        </span>
-      </button>
+        <div class="desc-panel desc-panel-detailed" id="desc-panel-detailed">
+          <button
+            type="button"
+            class="modal-collapse-btn"
+            id="modal-collapse-btn"
+          >
+            <span>← Retour à l'aperçu</span>
+          </button>
 
-      <div
-        class="modal-long-desc"
-        id="modal-long-desc"
-      >
-        <div class="modal-long-desc-inner">
-          <div>
+          <div class="modal-detailed-content">
             ${project.longDescription}
           </div>
         </div>
@@ -732,22 +736,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ---------------------------------------------------------------------------
-    // Logique de l'accordéon
+    // Logique du balayage courte <-> détaillée
     // ---------------------------------------------------------------------------
 
+    const descSwap = document.getElementById('desc-swap');
+    const panelShort = document.getElementById('desc-panel-short');
+    const panelDetailed = document.getElementById('desc-panel-detailed');
     const expandBtn = document.getElementById('modal-expand-btn');
-    const longDesc = document.getElementById('modal-long-desc');
-    const expandSpan = expandBtn.querySelector('span');
+    const collapseBtn = document.getElementById('modal-collapse-btn');
+
+    // Le conteneur .desc-swap anime sa propre hauteur pour accompagner le
+    // panneau actif (les deux panneaux sont en position absolute, donc le
+    // conteneur ne connaît pas naturellement sa hauteur : on la calcule
+    // nous-mêmes à partir du panneau qui doit être visible).
+    const setSwapHeight = (panel) => {
+      requestAnimationFrame(() => {
+        descSwap.style.height = `${panel.scrollHeight}px`;
+      });
+    };
+
+    // Hauteur initiale = celle de la description courte
+    setSwapHeight(panelShort);
 
     expandBtn.addEventListener('click', () => {
-      const isExpanded = longDesc.classList.toggle('expanded');
+      descSwap.classList.add('is-detailed');
+      setSwapHeight(panelDetailed);
+    });
 
-      expandBtn.classList.toggle('active', isExpanded);
-      expandBtn.setAttribute('aria-expanded', isExpanded);
-
-      expandSpan.textContent = isExpanded
-        ? 'Show Less'
-        : 'Technical Details';
+    collapseBtn.addEventListener('click', () => {
+      descSwap.classList.remove('is-detailed');
+      setSwapHeight(panelShort);
     });
 
 

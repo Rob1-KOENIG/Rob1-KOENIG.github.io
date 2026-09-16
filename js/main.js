@@ -669,6 +669,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentImageIndex = 0;
   let descResizeObserver = null;
 
+  // ---------------------------------------------------------------------------
+  // Verrouillage du scroll de fond, compatible iOS
+  // ---------------------------------------------------------------------------
+  // "overflow: hidden" sur le body ne suffit pas sur iOS Safari : la page
+  // continue de "rebondir" et de défiler derrière la modale, ce qui donnait
+  // cette impression de navigation peu fluide sur mobile. La technique
+  // fiable consiste à figer le body en position fixe à sa position de
+  // scroll actuelle, puis à la restaurer à la fermeture.
+  let savedScrollY = 0;
+
+  const lockBodyScroll = () => {
+    savedScrollY = window.scrollY;
+    document.body.classList.add('modal-open');
+    document.body.style.top = `-${savedScrollY}px`;
+  };
+
+  const unlockBodyScroll = () => {
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, savedScrollY);
+  };
+
 
   // -----------------------------------------------------------------------------
   // Ouverture de la modal
@@ -720,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
             class="modal-expand-btn"
             id="modal-expand-btn"
           >
-            <span>See technical informations</span>
+            <span>Voir les détails techniques</span>
             <span class="chevron" aria-hidden="true">↑</span>
           </button>
         </div>
@@ -731,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             class="modal-collapse-btn"
             id="modal-collapse-btn"
           >
-            <span>← Back to preview</span>
+            <span>← Retour à l'aperçu</span>
           </button>
 
           <div class="modal-detailed-content">
@@ -890,7 +912,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const updateGalleryView = (index) => {
         currentImageIndex = index;
 
-        mainImg.src = currentGallery[currentImageIndex];
+        // Petit fondu enchaîné pour que le changement d'image soit visuellement
+        // doux plutôt qu'un remplacement instantané (surtout perceptible sur
+        // mobile où l'on navigue vite entre les photos).
+        mainImg.style.opacity = '0';
+        window.setTimeout(() => {
+          mainImg.src = currentGallery[currentImageIndex];
+          mainImg.style.opacity = '1';
+        }, 120);
 
         thumbs.forEach((thumb, thumbIndex) => {
           thumb.classList.toggle(
@@ -921,6 +950,40 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
 
+      // ---------------------------------------------------------------------
+      // Navigation au doigt (swipe) sur mobile
+      // ---------------------------------------------------------------------
+      // Les flèches restent utilisables, mais sur mobile on s'attend
+      // naturellement à pouvoir glisser le doigt pour changer de photo :
+      // c'est ce geste qui manquait et qui rendait la navigation moins
+      // naturelle sur téléphone.
+      const galleryMain = document.querySelector('.gallery-main');
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      galleryMain.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+        touchStartY = event.changedTouches[0].clientY;
+      }, { passive: true });
+
+      galleryMain.addEventListener('touchend', (event) => {
+        const deltaX = event.changedTouches[0].clientX - touchStartX;
+        const deltaY = event.changedTouches[0].clientY - touchStartY;
+
+        // On ignore les gestes trop courts ou trop verticaux (l'utilisateur
+        // essaie probablement de faire défiler la modale, pas la galerie).
+        if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) {
+          return;
+        }
+
+        if (deltaX < 0) {
+          nextBtn.click();
+        } else {
+          prevBtn.click();
+        }
+      }, { passive: true });
+
+
       // Clic sur une miniature
       thumbs.forEach((thumb) => {
         thumb.addEventListener('click', () => {
@@ -939,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------------------------------------------------------------------------
 
     modal.classList.add('active');
-    document.body.classList.add('modal-open');
+    lockBodyScroll();
   });
 
 
@@ -949,7 +1012,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const closeModal = () => {
     modal.classList.remove('active');
-    document.body.classList.remove('modal-open');
+    unlockBodyScroll();
   };
 
   modalClose.addEventListener('click', closeModal);

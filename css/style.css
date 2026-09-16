@@ -239,9 +239,20 @@ h2::after {
 
 .modal-container {
   background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px;
-  width: 100%; max-width: 1100px; max-height: 90vh; overflow-y: auto; position: relative;
-  display: flex; flex-direction: column; 
-  
+  width: 100%; max-width: 1100px; position: relative;
+  display: flex; flex-direction: column;
+  /* 90vh classique en repli, mais on privilégie svh/dvh juste après : sur
+     mobile, "vh" est calculé sur la hauteur totale du viewport, barre
+     d'adresse comprise, ce qui rendait la modale plus haute que l'espace
+     réellement visible et la faisait déborder de l'écran. */
+  max-height: 90vh;
+  max-height: 90svh;
+  overflow-y: auto;
+  /* Défilement fluide sur iOS (inertie) + empêche le "rebond" de fuiter
+     vers la page en dessous quand on arrive en haut/bas du contenu */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+
   /* Départ de l'animation : la modale est petite (scale 0.8) et un peu plus basse */
   transform: scale(0.8) translateY(40px); 
   opacity: 0;
@@ -257,11 +268,52 @@ h2::after {
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.modal-close { position: absolute; top: 1rem; right: 1.5rem; background: transparent; border: none; color: var(--text-muted); font-size: 2rem; cursor: pointer; z-index: 10; transition: color 0.2s; }
-.modal-close:hover { color: var(--accent); }
-/* La suite de ton CSS de la modale reste identique à partir d'ici (.modal-header, etc.) */
+/* Sur mobile, la modale devient une feuille plein écran plutôt qu'une
+   carte flottante : plus de risque de dépassement, plus de zone de
+   contenu visible, et une animation de glissement plus proche de ce que
+   les gens connaissent des apps natives (donc plus "fluide" ressenti). */
+@media (max-width: 640px) {
+  .modal-overlay { padding: 0; align-items: flex-end; }
 
-.modal-header { padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--card-border); }
+  .modal-container {
+    max-width: 100%;
+    max-height: 100svh;
+    max-height: 100dvh;
+    height: 100svh;
+    height: 100dvh;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+  }
+
+  .modal-overlay.active .modal-container {
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes modalSlideUp {
+    0% { opacity: 0; transform: translateY(100%); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 2rem; line-height: 1; cursor: pointer; z-index: 10; transition: color 0.2s; position: absolute; top: 1rem; right: 1.5rem; }
+.modal-close:hover { color: var(--accent); }
+
+.modal-header {
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  /* Reste visible en haut pendant que le corps de la modale défile en
+     dessous : sur mobile, on n'a plus besoin de remonter tout en haut
+     pour retrouver le bouton fermer. */
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+}
+@media (max-width: 640px) {
+  .modal-header { padding: 1.25rem 1.25rem 1rem; }
+  .modal-close { top: 0.9rem; right: 1rem; }
+}
+
 .modal-category { color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem; display: block; margin-bottom: 0.5rem; }
 .modal-title { font-size: 1.8rem; color: var(--text); margin-bottom: 1rem; border: none; padding: 0; }
 
@@ -270,10 +322,13 @@ h2::after {
   .modal-body { grid-template-columns: 1.2fr 1fr; }
   .modal-text-content { position: sticky; top: 2rem; height: max-content; }
 }
+@media (max-width: 640px) {
+  .modal-body { padding: 1.25rem; gap: 1.5rem; }
+}
 
 .modal-gallery { display: flex; flex-direction: column; gap: 1rem; }
-.gallery-main { position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--card-border); }
-.gallery-main img { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: contain; }
+.gallery-main { position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--card-border); touch-action: pan-y; }
+.gallery-main img { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: contain; transition: opacity 0.2s ease; }
 .gallery-arrow {
   position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.6);
   color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
@@ -282,8 +337,12 @@ h2::after {
 .gallery-arrow:hover { background: var(--accent); color: #000; transform: translateY(-50%) scale(1.1); }
 .gallery-prev { left: 10px; }
 .gallery-next { right: 10px; }
+/* Cibles tactiles plus grandes sur mobile (44px = recommandation Apple/Google) */
+@media (max-width: 640px) {
+  .gallery-arrow { width: 44px; height: 44px; }
+}
 
-.gallery-thumbnails { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--card-border) transparent; }
+.gallery-thumbnails { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--card-border) transparent; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 .gallery-thumbnails img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.4; border: 2px solid transparent; transition: opacity 0.2s, border-color 0.2s; }
 .gallery-thumbnails img:hover { opacity: 0.8; }
 .gallery-thumbnails .thumb.active { opacity: 1; border-color: var(--accent); }
@@ -335,7 +394,14 @@ h2::after {
 .modal-text p { margin-bottom: 1rem; color: var(--text-muted); }
 .modal-text ul { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); }
 
-body.modal-open { overflow: hidden; }
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  /* "top" est fixé dynamiquement en JS à -scrollY pour figer la page
+     exactement là où elle était (voir lockBodyScroll dans script.js) */
+}
 
 /* =========================================
    7. FOOTER & BOUTON THÈME

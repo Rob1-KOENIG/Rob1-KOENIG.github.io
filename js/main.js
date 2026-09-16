@@ -53,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Formula Student — CAN Bus Node",
       type: "academic",
       category: "ARECE Autonomous Racing",
-      shortDescription: "Hardware design for an autonomous vehicle CAN interface: regulated power stage (7-40V to 3.3V), TVS protections, SN65 transceiver, and ESP32. Multi-node testbench validation.",
+      shortDescription: "Custom CAN bus board for ARECE's Formula Student car, replacing a costly rented sensor rig. Regulated 7-40V→3.3V power stage, ESP32 with onboard CAN controller, and a 3-node testbench validation.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>As part of the ARECE association, the objective was to develop an autonomous vehicle for the Formula Student competition. We designed a CAN bus system to interconnect vehicle components like steering and motors, replacing expensive rented equipment.</p>
+        <p>ARECE (Autonomous Racing ECE) builds a 100%-autonomous car for the Formula Student competition — track runs, slalom, acceleration tests. Previously, the team rented an external chassis and bolted a sensor plate onto it during competition week, which was expensive and left little time for testing. To interconnect components like the steering, battery, and motors, I designed a custom CAN bus board.</p>
         <h3>Hardware Engineering</h3>
-        <p>I designed a custom PCB using KiCad. The board features an ESP32 microcontroller paired with an SN65HVD231 CAN transceiver. I also designed a regulated power supply capable of dropping 7-40V down to 3.3V, protected by TVS diodes.</p>
+        <p>The board is built around an ESP32, which already integrates a CAN controller (TWAI) — so only an external CAN transceiver was needed, chosen for its price, footprint, and ease of integration. The circuit splits into two sections: a power stage regulating a 7-40V input down to 3.3V, and a communication section combining the microcontroller, transceiver, and input filtering.</p>
         <h3>Validation</h3>
-        <p>The system was validated on a testbench with three interconnected nodes, analyzing the CAN frames with a CAN-Analyzer software to ensure reliable communication despite simulated voltage drops.</p>
+        <p>I validated the design on a 3-board testbench, using CAN-Analyzer software to inspect the frames exchanged between all three nodes and confirm reliable communication. The power stage was also stress-tested under simulated micro-cutouts, voltage spikes, and voltage drops.</p>
       `,
       image: "images/ARECE/1.jpg",
       gallery: [
@@ -76,14 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Autonomous Rover & LIDAR Navigation",
       type: "academic",
       category: "Mobile Robotics",
-      shortDescription: "Real-time 2D SLAM mapping and Nav2 autonomous obstacle avoidance with ROS 2 under Linux Ubuntu. Custom controller PCB running ESP-NOW and UART serial communication.",
+      shortDescription: "Year-long 3-person 'Technical Project': a dual-core ESP32 rover with real-time 2D SLAM (Rviz) and Nav2 autonomous navigation under Ubuntu 22, plus a custom ESP-NOW remote built around a single-layer KiCad PCB.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>A year-long technical project to build an autonomous rover equipped with a LIDAR sensor, capable of 2D mapping and autonomous navigation, alongside manual control.</p>
-        <h3>Software & Navigation (ROS 2)</h3>
-        <p>Operating on a dual-boot Ubuntu 22 system, we utilized ROS 2 for the software stack. I configured Rviz for real-time 2D SLAM mapping and implemented the Nav2 stack for autonomous path planning and obstacle avoidance using LIDAR data.</p>
-        <h3>Custom Hardware Controller</h3>
-        <p>I designed a remote control PCB using KiCad (single-layer, under 8 vias). The remote uses an ATmega328P and an ESP-01S, communicating via UART with level shifters (2N7000). It sends commands to the rover via the ESP-NOW protocol.</p>
+        <p>During our first majeure year, our 3-person team spent a full year building a remote and the software for autonomous, LIDAR-based navigation of a rover — alongside manual control.</p>
+        <h3>Milestone 1 — Breadboard & Remote</h3>
+        <p>We prototyped the remote's circuit on a breadboard. In parallel, a dual-core ESP32 fitted with an OKDO LIDAR logged and displayed range data on a custom Pygame GUI on one core, while the second core handled incoming remote commands. Manual control ran over ESP-NOW, with the remote built around an ATmega328P and an ESP-01S talking over UART through two 2N7000 level shifters (5V ↔ 3.3V).</p>
+        <h3>Milestone 2 — PCB in KiCad</h3>
+        <p>We then designed the remote's schematic and routed it as a single-layer PCB using under 8 vias, sourcing external symbol libraries in KiCad for components missing from the default set.</p>
+        <h3>Milestone 3 — ROS 2 Autonomy</h3>
+        <p>For the second semester, we set up a dual-boot Ubuntu 22 system to run ROS 2: Rviz for real-time 2D SLAM mapping, and Nav2 for autonomous path planning and obstacle avoidance. I wrote a custom ROS 2 node publishing to the <code>/cmd_vel</code> topic so Nav2 could drive the rover directly toward any point selected on the saved map.</p>
       `,
       image: "images/Technical_project/1.jpg",
       gallery: [
@@ -100,14 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Computer Vision Sorting Robot",
       type: "academic",
       category: "Robotics & OpenCV",
-      shortDescription: "Engineered an ESP8266-controlled robot relying on HTTP requests. Implemented a Python computer vision script (OpenCV) for object detection and a Pygame path-planning algorithm.",
+      shortDescription: "Year-long 6-person milestone project: an ESP8266 robot that collects colored cubes on a game board using OpenCV vision, a custom Pygame path-planner, and a fully redesigned 3D-printed chassis and plow.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed a remote-controlled robot capable of navigating a predefined map to collect colored cubes while avoiding obstacles, utilizing computer vision.</p>
+        <p>In our second year, a 6-person team spent the full school year on a milestone-driven project: build a robot, remote-controlled via computer vision, able to navigate a predefined board, collect colored cubes, and avoid obstacles.</p>
         <h3>Path Planning & Vision</h3>
-        <p>A Python script running on a PC handles computer vision via OpenCV to detect ArUco markers and colored cubes. A custom path-planning algorithm, built with Pygame, calculates optimal routes and collision avoidance.</p>
+        <p>We were given a kit with a chassis, an ESP8266, and a motor shield, but chose to keep only the chassis and electronics — everything else was redesigned and 3D-printed. On the PC side, a Python script uses OpenCV for object detection and a custom path-planning algorithm, built with Pygame, that prioritizes grabbing the highest-value cubes first and calculates collision-free routes to the drop zone.</p>
         <h3>Hardware & Control</h3>
-        <p>The robot is controlled by an ESP8266 acting as an HTTP web server, receiving movement commands from the PC. I also designed and 3D-printed (FDM) the robot's custom chassis, cover, and a functional plow mechanism using Fusion 360.</p>
+        <p>The ESP8266 runs as an HTTP server on a laptop's shared connection, executing movement commands sent from the PC. I designed and 3D-printed the robot's chassis fixtures, body, and cover in Fusion 360, plus a snow-plow-style scoop to push cubes into the deposit zone — a part I iterated on after the first version proved too small to hold the cubes reliably.</p>
       `,
       image: "images/OPENCV_Rover/1.jpg",
       gallery: [
@@ -123,14 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "FPGA Elevator Controller",
       type: "academic",
       category: "Digital Electronics",
-      shortDescription: "Programmed a functional elevator control system on a DE10-Lite FPGA using Quartus. Features priority scheduling, 7-segment display logic, and ultrasonic obstacle detection.",
+      shortDescription: "A fully working miniature 8-floor elevator programmed on a DE10-Lite FPGA in Quartus: priority call scheduling, ultrasonic door-safety detection, 7-segment displays, and 8 external floor buttons.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Designed and programmed a miniature, fully functional 8-floor elevator system using a DE10-Lite FPGA board and the Intel Quartus software.</p>
+        <p>FPGA programming was one of the languages introduced during our engineering cycle at ECE. A FPGA (Field-Programmable Gate Array) is an integrated circuit that can be programmed after manufacturing to implement specific logic functions — our assignment was to build a fully functional, if miniature, elevator on a DE10-Lite board using Quartus (Intel).</p>
         <h3>Features & Logic</h3>
-        <p>The system implements a priority-based scheduling algorithm for floor calls. It features a door-closing animation on 7-segment displays and utilizes an ultrasonic sensor to detect obstacles and prevent the doors from closing unsafely.</p>
+        <p>The elevator handles call priority like a real one: if floor 4 is called and then floor 5, it serves 4 first before heading to 5. A door-closing animation runs on the 7-segment displays, and an ultrasonic sensor blocks the doors from closing if it detects an obstacle between them. A second 7-segment display shows the current floor, and a buzzer beeps on arrival — just like the real thing.</p>
         <h3>External Peripherals</h3>
-        <p>I integrated external push buttons for floor selection and coded a custom multiplexer function based on datasheet specifications to control external LED floor indicators.</p>
+        <p>Beyond the board's own switches, I added external push buttons for floor selection — these needed their own debounce/timeout logic, since the elevator has to run fully autonomously and give riders time to get in and out. I also wired external LED floor indicators driven by a multiplexer, whose control function I coded directly from the multiplexer's datasheet.</p>
       `,
       image: "images/FPGA_Lift(1).png",
       gallery: [
@@ -143,14 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Flappy Bird on PIC18F & NEAT AI",
       type: "academic",
       category: "Embedded Systems & AI",
-      shortDescription: "Developed Flappy Bird in Assembly for a PIC18F microcontroller using IR/ultrasonic sensors and a GLCD. Trained a Python NEAT AI via UART to play the game autonomously.",
+      shortDescription: "A 5-student team's take on learning Assembly: Flappy Bird running on a PIC18F (MikroProg board) with ultrasonic/IR bird control, GLCD rendering, EEPROM history — plus a NEAT AI trained to master it.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed a hardware-based version of Flappy Bird to learn Assembly language programming on a MikroProg PIC18F development board.</p>
+        <p>To get hands-on with Assembly language, our 5-person team built a hardware version of Flappy Bird on a MikroProg PIC18F development board, with a fixed spec sheet: an ultrasonic sensor and an IR sensor for bird control, a digital encoder for speed/menu navigation, physical buttons for menu input, a 7-segment display for the score, and a GLCD for the game's UI and animations.</p>
         <h3>Hardware Integration</h3>
-        <p>The game interfaces with an ultrasonic sensor, an IR sensor, and a digital encoder for controls. Game physics are computed on a PC via a Python script communicating with the PIC18F over USB (UART). The UI and animations are rendered on a GLCD, with high scores saved to EEPROM.</p>
+        <p>The PIC18F's limited compute power meant the game physics had to run on a PC, via a Python script talking to the chip over USB. The board itself handles rendering — GLCD textures for the game, 7-segment digits and button registers for the score and menu navigation — and stores play history directly in its onboard EEPROM so a previous game can be replayed. External libraries handle the raw sensor readings from the ultrasonic and IR modules.</p>
         <h3>NEAT AI Implementation</h3>
-        <p>I implemented a NEAT (NeuroEvolution of Augmenting Topologies) AI algorithm in Python. The AI autonomously learns to play the game by evaluating multiple parameter combinations, retaining the most successful "seeds" to achieve the highest possible score.</p>
+        <p>To push the project further, I implemented a NEAT (NeuroEvolution of Augmenting Topologies) algorithm in Python to teach a minimal AI to play. It tries a wide range of parameter combinations, keeps the best-performing "seed," and keeps refining it — once a threshold (generations, attempts, or time) is reached, it prints the best parameters found straight to the console.</p>
       `,
       image: "images/FlapicBird/1.png",
       gallery: [
@@ -165,14 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Voice Recognition Trivia Game",
       type: "academic",
       category: "Audio DSP & Machine Learning",
-      shortDescription: "Created an interactive trivia game on Arduino Due. Implemented real-time FIR filtering and MFCC extraction to train a minimal neural network for word recognition.",
+      shortDescription: "The most ambitious electronics project of our degree: a voice-controlled trivia speaker in a 3D-printed case, with real-time FIR/DFT filtering and MFCC extraction feeding a minimal neural network.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed a voice-controlled trivia game housed in a custom 3D-printed enclosure, utilizing an Arduino Due, a DFPlayer Mini for audio playback, and a microphone.</p>
+        <p>Our final electronics project was arguably the most polished of the whole degree: an interactive speaker that plays a general-knowledge trivia game via voice recognition. It runs on an Arduino Due, a DFPlayer Mini for audio playback, a microphone, two speakers, and an answer button, all housed in a custom 3D-printed enclosure. On power-up, a jingle plays from the DF Player's SD card, a question is read aloud, and the game waits for a button press before recording the spoken answer.</p>
         <h3>Digital Signal Processing</h3>
-        <p>The system performs real-time audio sampling at 32kHz using a circular buffer due to memory constraints. The signal is processed with a FIR filter, downsampled, and analyzed using a Discrete Fourier Transform (DFT).</p>
+        <p>Because of memory limits, incoming audio is captured through a circular buffer that frees memory as it's consumed. The signal is then sampled and filtered with a FIR filter, analyzed with a Discrete Fourier Transform (DFT), and converted into Mel-Frequency Cepstral Coefficients (MFCC) — a compact representation of which frequencies are present and how strongly.</p>
         <h3>Machine Learning</h3>
-        <p>I extracted Mel-Frequency Cepstral Coefficients (MFCC) from 50 recordings per word to train a minimal neural network. During gameplay, real-time MFCCs are compared against the trained model to validate the player's spoken answers.</p>
+        <p>To teach the game to recognize each word, we recorded 50 samples per word and extracted their MFCC coefficients to train a minimal neural network. During play, the MFCCs from the live recording are compared against the trained model to validate the spoken answer. The final game holds about ten questions, expandable further — the only real limit is the SD card's capacity.</p>
       `,
       image: "images/Neural_speech/1.jpg",
       gallery: [
@@ -188,14 +190,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Conway's Game of Life in C",
       type: "academic",
       category: "Advanced C Programming",
-      shortDescription: "Optimized a Game of Life simulation in C with strict memory constraints (64kB) and a fixed 60Hz refresh rate, utilizing multithreading and bitwise operations on uint64_t arrays.",
+      shortDescription: "A 2-person 'Advanced C' assignment: Conway's Game of Life under strict microcontroller-style constraints — 64kB memory cap, fixed 60Hz refresh, multithreading, and multiple boundary modes.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed Conway's Game of Life in C, designed to run under strict microcontroller constraints: a maximum of 64kB memory footprint and a fixed 60Hz refresh rate.</p>
+        <p>Our Advanced C course built on first- and second-year fundamentals with topics like code optimization, advanced memory management, function pointers, and compiling with gcc under Cygwin. In pairs, we implemented Conway's Game of Life — the 1970 cellular automaton in which each cell's next state depends on how many of its neighbors are alive — under real technical constraints, as if it were meant to run on a microcontroller.</p>
         <h3>Memory Optimization</h3>
-        <p>To meet the memory limits, the grid is stored using an array of \`uint64_t\`, allowing 64 cells to be packed into a single integer. Pointer logic was heavily utilized for direct, fast memory manipulation.</p>
+        <p>The constraints: 64kB of memory to store the grid, a fixed 60Hz refresh rate, mandatory multithreading, and support for multiple boundary modes (borderless, cells dying past the edge, wrap-around/toroidal). To fit the memory budget, the grid is stored as an array of <code>uint64_t</code>, packing 64 cells into a single integer, with direct pointer manipulation used to read and flip individual cells efficiently.</p>
         <h3>Performance</h3>
-        <p>The physics calculations are performed on a PC connected via USB, utilizing multithreading and configurable boundary conditions (e.g., toroidal, mirror) to maintain the required performance metrics.</p>
+        <p>The simulation's physics run on a PC connected to the board over USB, with multithreading used to keep the fixed 60Hz refresh rate regardless of which boundary mode is active.</p>
       `,
       image: "images/Game_of_life/1.png",
       gallery: [
@@ -210,12 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Assembly Line Graph Optimization",
       type: "academic",
       category: "Algorithms & Graph Theory",
-      shortDescription: "Developed a CLI application in C to optimize car manufacturing assembly lines based on task duration, precedence, and cycle time constraints using graph theory principles.",
+      shortDescription: "A 4-student graph-theory assignment: a C command-line tool that optimizes a car assembly line, offering duration-only, precedence-only, and combined duration+precedence+max-cycle-time modes.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Applied graph theory to optimize a theoretical car manufacturing assembly line. The goal was to process tasks efficiently by representing them as a graph with weighted edges.</p>
+        <p>In the first semester of our second engineering year, we studied graph theory — how a set of tasks or actions can be optimized by representing them as a graph with weighted edges. To put that into practice, our 4-person team built a tool to optimize the manufacturing process of a car on an assembly line.</p>
         <h3>C Implementation</h3>
-        <p>I developed a command-line interface (CLI) tool in C. The program parses task constraints (duration, precedence, exclusion) from text files and offers users multiple optimization modes, such as cycle-time limited routing or precedence-only sorting.</p>
+        <p>The result is a command-line tool in C that loads each task's duration and precedence constraints from text files, then runs one of three optimization modes: by duration alone (ignoring task order), by precedence alone (ignoring duration), or a combined mode that accounts for order, duration, and a maximum total cycle time. On each run, the program greets the user, asks which mode to apply, runs the chosen optimization function, and offers to run another mode straight after.</p>
       `,
       image: "images/assembly_line.png",
       gallery: [
@@ -228,12 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "2D Games in C (Allegro)",
       type: "academic",
       category: "Game Development",
-      shortDescription: "Programmed a maze game and a Star Wars-themed minigame collection in C using the Allegro graphics library. Implemented collisions, interactive maps, and audio settings.",
+      shortDescription: "Two 4-student C projects to cement fundamentals: a CLI maze board game later upgraded with an Allegro GUI, then a full Star Wars-themed hub of 8 minigames with a 2-player scoring system and interactive map.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed multiple 2D games from scratch using the C language and the Allegro graphics library to solidify programming fundamentals (pointers, dynamic allocation, structures).</p>
-        <h3>Features</h3>
-        <p>The first project was a terminal-based maze game, later upgraded with an Allegro GUI featuring custom menus and textures. The second project was a Star Wars-themed hub offering multiple minigames (e.g., Snake, Piano Tiles, Flappy Bird). I implemented collision detection, dynamic scaling, and interactive map navigation.</p>
+        <p>Two separate first-year projects, both in groups of four, built to solidify C fundamentals — pointers, malloc/calloc, structures — while learning the Allegro graphics library.</p>
+        <h3>Maze Game</h3>
+        <p>The first project was a fully playable maze board game, originally built for the command line. We later gave it an Allegro GUI with custom menus and textures — all hand-drawn by a teammate — plus a poster I designed in Illustrator.</p>
+        <h3>Star Wars Minigame Hub</h3>
+        <p>The brief for the second project was to build at least three minigames from a given list (duck hunt, balloon shooting, Piano Tiles, Snake, Crossy Road) inside a single 2D game made with Allegro. We went further and built a Star Wars-themed hub with eight minigames — those plus Flappy Bird, Geometry Dash, and an original concept we called "Head Jedi." Players move across an interactive map with a minimap and collision detection to reach each minigame's building, choose a username and audio settings, and compete two-player: first to five round wins takes the match.</p>
       `,
       image: "images/Allegro/1.png",
       gallery: [
@@ -250,12 +254,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "BlaBla-Omnes Carpooling Platform",
       type: "academic",
       category: "Full-Stack Web Development",
-      shortDescription: "Developed a responsive carpooling website for students using HTML, CSS, JavaScript, and PHP, integrated with a SQL database and Google Maps API.",
+      shortDescription: "A second-year web dev assignment: a responsive carpooling site connecting ECE's campuses, with a PHP/SQL backend handling concurrent bookings and an optional Google Maps integration for routes.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Created a web-based carpooling platform connecting different ECE campuses. The project covered front-end and back-end web development fundamentals.</p>
+        <p>Our second year introduced web programming languages — HTML, JavaScript, CSS, and PHP. To put them into practice, our team was assigned a project to build a carpooling website connecting ECE's different campuses.</p>
         <h3>Tech Stack</h3>
-        <p>The interface was built responsively using HTML, CSS, and JavaScript, integrating the Google Maps API for route visualization. The backend relies on PHP and a SQL database to manage users and concurrent trip reservations. Advanced features included data encryption and UI animations.</p>
+        <p>The site needed to support several users viewing and booking the same rides at once, which meant implementing a SQL database on the backend. It also had to be fully responsive, adapting its interface to any screen size. Beyond the core brief, optional extensions were on the table for those who wanted to go further: UI animations, a Google Maps integration for route visualization, and stronger data encryption — all of which we implemented.</p>
       `,
       image: "images/Carpool/1.png",
       gallery: [
@@ -271,12 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Theme Park Management App",
       type: "academic",
       category: "Software Engineering",
-      shortDescription: "Built a Java application using Scene Builder for the UI and a local SQL database via the DAO pattern to manage theme park attractions and customer statistics.",
+      shortDescription: "A third-year Java application for theme park administration — attractions, customers, and stats — wireframed in Figma, built with JavaFX Scene Builder on a local SQL database via the DAO pattern.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Developed a Java-based desktop application designed for theme park administration, managing attractions, customer data, and operational statistics.</p>
+        <p>Our third year introduced Java programming. To put it to use, our team picked a project from a list of subjects and chose to build a management application for a theme park, covering attractions, customers, and operational statistics.</p>
         <h3>Implementation</h3>
-        <p>After wireframing in Figma, the GUI was constructed using JavaFX Scene Builder. Data persistence was handled via a local SQL database, utilizing the Data Access Object (DAO) design pattern for robust CRUD operations.</p>
+        <p>We started by wireframing the interface in Figma to settle on a direction before building anything, then translated that layout into a working GUI with JavaFX Scene Builder. For data persistence, we set up a SQL database hosted locally and accessed it through the DAO (Data Access Object) design pattern, giving us clean, structured create/read/update/delete operations on attractions and customer records.</p>
       `,
       image: "images/theme_park/1.png",
       gallery: [
@@ -291,12 +295,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "FertiLyon Smart Compost Bin",
       type: "academic",
       category: "Sustainable Tech",
-      shortDescription: "Concept and 3D rendering for a connected compost bin aimed at urban environments, featuring an optional mobile app with a reward system for users.",
+      shortDescription: "A first-year, 6-student, year-long project tackling Lyon's soil depletion: 'FertiLyon,' a connected compost bin concept with a fill-level tracking app and a reward system for partner store discounts.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>An early academic project aimed at addressing soil depletion in Lyon. We conceptualized 'FertiLyon', a digital, connected compost bin designed for both urban and rural citizens.</p>
+        <p>In my first year at ECE Lyon, our 6-person team spent the school year tackling the question: how do we fight the depletion of Lyon's soils? We answered with 'FertiLyon,' a connected, digital compost bin designed for every citizen, in the city or in rural areas.</p>
         <h3>Design</h3>
-        <p>I produced the 3D renderings and promotional materials. The concept included a mobile application to monitor bin fill levels and gamify the experience by offering store discounts as rewards for composting.</p>
+        <p>To stay modern and sustainable, we designed a connected compost bin paired with an optional app letting users check each bin's fill level. To encourage people to actually compost their organic waste, the app also included a reward system, offering discounts at partner stores for regular use. I produced the 3D renderings and promotional poster. The concept caught the jury's attention for its originality and relevance, though they flagged the considerable budget a city-wide rollout would require.</p>
       `,
       image: "images/FertiLyon/1.png",
       gallery: [
@@ -312,14 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Push-Pull Tube Audio Amplifier",
       type: "personal",
       category: "Analog & High Voltage",
-      shortDescription: "Schematic capture and dual-layer KiCad PCB routing for a high-voltage vacuum tube amplifier (ECC83 preamp, EL34 power stage). Dielectric insulation checks and manual THT soldering.",
+      shortDescription: "An ongoing project since August 2024: a mono push-pull tube amplifier with 3 ECC83 preamp tubes and 2 EL34 power tubes, schematics and PCBs built in KiCad from 1960s hobbyist references.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>A passionate endeavor to design and build a custom mono vacuum tube amplifier, seeking the characteristic warm audio profile of vintage gear.</p>
+        <p>Tube amps are technically outclassed on raw power by transistor amps, but audiophiles still chase their characteristic sound — and after building speakers and restoring vintage audio gear, actually building one myself felt like the natural next step. I started in August 2024 on a mono design using 5 tubes: three ECC83s in cascade for the preamp stage, and two EL34s for push-pull power amplification.</p>
         <h3>Circuit Design</h3>
-        <p>Utilizing 1960s schematics as a reference, I designed the circuit using three ECC83 tubes in cascade for the preamp stage, and two EL34 tubes for push-pull power amplification.</p>
+        <p>I based the schematic on 1960s hobbyist literature detailing tube amp design and wiring, and laid it out in KiCad across three sheets: power supply, preamp stage, and power amplification stage.</p>
         <h3>PCB & Fabrication</h3>
-        <p>The design is split across two dual-layer PCBs (power/bias management and signal routing) created in KiCad. Due to high voltages, I implemented wide traces and strict dielectric isolation rules. All components were manually soldered and verified.</p>
+        <p>The build splits across two PCBs — one handling tube heater and bias power, the other carrying the resistors, capacitors, and connectors that wire the tubes together — both routed as 2-layer boards with wide traces and strong isolation given the high voltages involved. Every component was hand-soldered. The project is currently in its verification phase, ahead of building a protective enclosure.</p>
       `,
       image: "images/tube-amp.jpg",
       gallery: [
@@ -333,14 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Bookshelf Speakers & Active Subwoofer",
       type: "personal",
       category: "Electroacoustics & Woodworking",
-      shortDescription: "Custom bass-reflex acoustic enclosure design, WinISD resonance tuning, passive 3-way crossover calculation, and internal acoustic dampening for linear frequency response.",
+      shortDescription: "A self-taught 2.1 system built over a year (2021-2022) from salvaged drivers: iterated bass-reflex bookshelf enclosures tuned by ear, a 25Hz Visaton subwoofer modeled in SubBox Pro, and matched amplification.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Designed and built a complete custom 2.1 audio system from scratch, combining woodworking, 3D printing, and electroacoustics.</p>
+        <p>This project means a lot to me — it pulls together several of my interests at once: audio, woodworking, 3D printing, electronics, and 3D design. It started in June 2021 when I came into a stash of salvaged woofers and tweeters and began researching existing designs online. Given the size of the woofer's low end, I settled on a bookshelf format — compact enough to sit on furniture I already owned.</p>
         <h3>Bookshelf Speakers</h3>
-        <p>Engineered 10-liter bass-reflex enclosures. I tuned the front port to 500Hz and the rear port to 40Hz (matching the woofer's resonant frequency) to optimize bass response. I added a 75mm midrange driver and utilized acoustic foam dampening to clarify vocals and reduce cabinet resonance.</p>
-        <h3>Active Subwoofer</h3>
-        <p>Modeled a 40x40x45cm bass-reflex subwoofer enclosure in SubBox Pro for a 25cm Visaton driver capable of 25Hz. It is powered by a high-efficiency Class D amplifier.</p>
+        <p>The woofer's optimal enclosure volume was 10L, built as a bass-reflex box (a tuned port that reinforces bass at a set frequency), while the sealed tweeter needed no cabinet of its own. My first prototype had a single, uncalibrated rear port that left the low end imprecise, and no midrange driver, which left vocals sounding dull next to very present highs. I revised the design with a front port tuned by ear to 500Hz, moved the rear port in phase with the woofer's cone and tuned it to 40Hz — the woofer's own resonant frequency — and added a 75mm midrange driver (250–2000Hz) to bring vocal clarity back. I also lined the cabinet walls with acoustic foam and filled the remaining volume with acoustic wool to tame internal resonance and clean up the bass.</p>
+        <h3>Amplification & Active Subwoofer</h3>
+        <p>I paired the 6-ohm speakers with a Class-A amplifier for its warm, low-distortion sound and strong damping factor — specifically an Onkyo rated at 250W per channel into 6 ohms — for well-controlled bass at high dynamic headroom. Between December 2021 and February 2022, I extended the system with an active subwoofer built around a 25cm Visaton W250 driver, reaching down to 25Hz. I modeled and tuned a 40x40x45cm bass-reflex enclosure for it in SubBox Pro, powered by an efficient Class-D amplifier.</p>
       `,
       image: "images/speakers/1.jpg",
       gallery: [
@@ -357,12 +361,14 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Magnetic Tape Player Restoration",
       type: "personal",
       category: "Electronics Repair",
-      shortDescription: "Restored a vintage 1970s Sony TC-270 reel-to-reel tape recorder. Replaced motor run capacitors, manufactured custom polyurethane drive belts, and re-lubricated mechanisms.",
+      shortDescription: "A 4-month restoration (Jan-Apr 2024) of a Sony TC-270 (1972-1976) left in an attic for decades: diagnosed a failed AC start capacitor, recast a polyurethane drive belt, and relubricated the full mechanism.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Acquired and fully restored a 1972-1976 Sony TC-270 reel-to-reel magnetic tape recorder that had been stored in an attic for decades.</p>
-        <h3>Restoration Process</h3>
-        <p>Diagnosed a motor stalling issue caused by a faulty AC start/run capacitor, which I replaced. I manufactured a new polyurethane drive belt to replace the degraded original, cleaned the rubber rollers with alcohol, and re-lubricated the entire mechanical assembly with lithium grease.</p>
+        <p>Having always been drawn to audio gear, I decided to pick up a reel-to-reel tape recorder — and to make the find more interesting, one that needed real work: a Sony TC-270 (1972-1976), left in an attic for decades. It's a consumer two-head deck (one for erasing, one for record/playback) with a built-in amp and preamp, letting it drive speakers directly without any external gear — an option sold separately at the time.</p>
+        <h3>How Reel-to-Reel Works</h3>
+        <p>Before touching anything, I studied the mechanism: tape runs from a supply reel to a take-up reel via a flywheel and capstan system, which stabilizes playback speed and prevents the AC motor's speed variation from distorting the sound. This deck's heads record two tracks at once, i.e. stereo left and right channels simultaneously.</p>
+        <h3>Diagnosis & Restoration</h3>
+        <p>With no tape loaded, the motor, reel supports, capstans, and flywheel all worked fine. But once a tape went in, the motor struggled hard to drive the reel and stalled while vibrating heavily. That traced back to a failed AC start/run capacitor — needed to phase-shift the AC motor's supply — which I replaced with an equivalent part. From there, I moved to a full mechanical clean-up: the belt was completely slack, so I cast a replacement in polyurethane; the rubber rollers were still in good shape and just needed a wipe with 90° alcohol. I then fully disassembled the mechanism, stripped the old grease, and relubricated every moving part with lithium grease.</p>
       `,
       image: "images/tape-recorder/1.png",
       gallery: [
@@ -379,12 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Custom 3D Printed Tape Reels",
       type: "personal",
       category: "3D CAD & Printing",
-      shortDescription: "Reverse-engineered and modeled iconic Sony R-7MB tape reels in Fusion 360. Printed functional replicas using high-infill PETG for durability and PLA for the smooth inner hub.",
+      shortDescription: "Two months (Jul-Aug 2024) reverse-engineering the nearly-impossible-to-find Sony R-7MB reel in Fusion 360, then 3D printing functional replicas: 100%-infill PETG faces and a smooth PLA hub.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>Due to the rarity of original 1970s Sony R-7MB magnetic tape reels in Europe, I decided to reverse-engineer and 3D print my own functional replicas.</p>
+        <p>Right after restoring my tape recorder, I turned to reproducing its reels — inspired by the original 1970s Sony R-7MB, a now-iconic reel that's extremely rare, especially in Europe. I used a reel I already owned as a reference to get exact measurements: diameter, hub bore, and so on. The reel breaks down into three parts — two faces and an inner hub — held together with screws.</p>
         <h3>Modeling & Printing</h3>
-        <p>Using an existing reel for reference, I modeled the three-part assembly (two faces and a 1/4-inch hub) in Fusion 360. The outer faces were printed in PETG at 100% infill for mechanical resistance to torsion and braking forces, while the inner hub was printed in PLA to provide a perfectly smooth surface for the magnetic tape.</p>
+        <p>I modeled all three parts in Fusion 360: sketching the outer profile first, checking dimensions and printability as I went, then extruding it while respecting a maximum wall thickness so the tape wouldn't rub against the sides. The central hub needed to be precise enough to seat standard 1/4-inch (6.35mm) tape — mine ended up at 11mm (0.45in). Everything was printed at a 0.1mm layer height for the smoothest possible finish: the faces in PETG at 100% infill for torsion resistance (rewinding, braking, handling), and the hub in PLA, chosen mainly for its smooth, matte finish that's kinder to the tape.</p>
       `,
       image: "images/Reel_to_reel/1.png",
       gallery: [
@@ -400,12 +406,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "3D Architectural Replicas",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
-      shortDescription: "High-precision 3D mechanical modeling in Fusion 360 and SolidWorks to create 1:100 scale architectural replicas of houses, ready for FDM 3D printing.",
+      shortDescription: "A Fiverr commission (Aug-Nov 2025): modeling a client's past homes at 1:100 scale in Fusion 360 from photos and floor plans, optimized for FDM printing on the client's own Creality printer.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>A freelance commission to create a miniature 'village' of a client's past homes.</p>
+        <p>One of my more recent Fiverr commissions: recreating every house a client had lived in, to build a kind of miniature village of their past homes. The client supplied detailed photos and floor plans for each house so I could reproduce them at 1:100 scale.</p>
         <h3>Modeling Process</h3>
-        <p>Working from reference photos and 2D floor plans, I modeled five detailed houses at a 1:100 scale using Fusion 360. The models were specifically optimized for FDM 3D printing, ensuring wall thicknesses and overhangs were printable on the client's Creality machine.</p>
+        <p>I modeled each house in Fusion 360, working directly from the reference photos and plans. So far I've completed five houses, all optimized for FDM printing — keeping wall thicknesses and overhangs within what the client's Creality printer could reliably produce, since they handled the printing themselves.</p>
       `,
       image: "images/Fiverr_houses/1.png",
       gallery: [
@@ -422,12 +428,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: "Banana-Shaped Acoustic Speaker",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
-      shortDescription: "Designed a custom banana-shaped speaker enclosure. Modeled internal acoustic volumes in Fusion 360 for uniform wall thickness and simulated acoustic response using WinISD.",
+      shortDescription: "An offbeat Fiverr brief since August 2025: a fully 3D-printable banana-shaped speaker enclosure sculpted in Fusion 360 around the client's chosen drivers, with acoustic response validated in WinISD.",
       longDescription: `
         <h3>Project Overview</h3>
-        <p>An unconventional freelance request to design a functional, 3D-printable speaker enclosure shaped like a banana, accommodating the client's pre-selected drivers.</p>
+        <p>One of the more offbeat requests I've taken on Fiverr: a speaker enclosure shaped like a banana. The client had already picked out the drivers and set a maximum footprint, so the job was purely about making the shape work acoustically and mechanically.</p>
         <h3>Acoustic Design</h3>
-        <p>I sculpted the complex organic shape in Fusion 360, carefully hollowing out internal volumes to ensure uniform wall thickness for distortion-free audio. I integrated internal cable routing guides and validated the enclosure's frequency response through WinISD simulations prior to slicing the model for 3D printing.</p>
+        <p>I sculpted the banana form in Fusion 360, hollowing out internal volumes for each driver with a uniform wall thickness to keep the sound clean and distortion-free. I added internal guides for cable routing, then ran a WinISD simulation of the enclosure's frequency response before slicing the model for 3D printing.</p>
       `,
       image: "images/Banana_fiverr/3.png",
       gallery: [
@@ -661,6 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentGallery = [];
   let currentImageIndex = 0;
+  let descResizeObserver = null;
 
 
   // -----------------------------------------------------------------------------
@@ -750,61 +757,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // pour l'effet de balayage — donc le conteneur ne connaît pas
     // naturellement sa hauteur : on la calcule nous-mêmes à partir du
     // panneau qui doit être visible).
-    let activePanel = panelShort;
+    //
+    // On utilise un ResizeObserver plutôt qu'une mesure ponctuelle : il se
+    // redéclenche automatiquement à CHAQUE changement de taille du panneau
+    // actif, quelle qu'en soit la cause (police custom qui finit de charger,
+    // redimensionnement de la fenêtre, texte plus long sur un autre projet,
+    // etc.). C'est ce qui garantit que le bas du contenu ne soit plus jamais
+    // rogné, sans avoir à gérer chaque cas à la main.
+    let activeDescPanel = panelShort;
 
-    const syncSwapHeight = () => {
-      descSwap.style.height = `${activePanel.scrollHeight}px`;
-    };
+    // On coupe l'observateur du projet précédemment ouvert : sinon, à
+    // chaque nouveau projet, on en accumulerait un nouveau pour rien.
+    descResizeObserver?.disconnect();
 
-    // Mesure toujours DIFFÉRÉE au frame suivant. C'est essentiel : à
-    // l'instant où ce code s'exécute, la modale n'a pas encore reçu sa
-    // classe .active (ça arrive plus loin dans la fonction), donc
-    // scrollHeight vaudrait 0 si on mesurait tout de suite — ce qui
-    // coupait le bas de la description courte à l'ouverture.
-    requestAnimationFrame(syncSwapHeight);
+    descResizeObserver = new ResizeObserver(() => {
+      descSwap.style.height = `${activeDescPanel.scrollHeight}px`;
+    });
 
-    const animateSwapTo = (panel) => {
-      // Figer la hauteur actuelle avant de changer de panneau actif, pour
-      // avoir un point de départ propre à l'animation.
-      const startHeight = descSwap.getBoundingClientRect().height;
-      descSwap.style.height = `${startHeight}px`;
-      void descSwap.offsetHeight; // force le navigateur à appliquer la valeur
-
-      activePanel = panel;
-      requestAnimationFrame(syncSwapHeight);
-    };
+    descResizeObserver.observe(panelShort);
+    descResizeObserver.observe(panelDetailed);
 
     expandBtn.addEventListener('click', () => {
       descSwap.classList.add('is-detailed');
-      animateSwapTo(panelDetailed);
+      activeDescPanel = panelDetailed;
+      descSwap.style.height = `${panelDetailed.scrollHeight}px`;
     });
 
     collapseBtn.addEventListener('click', () => {
       descSwap.classList.remove('is-detailed');
-      animateSwapTo(panelShort);
-    });
-
-    // Filet de sécurité : si une police custom (ex. Inter, chargée depuis
-    // le web) finit de se charger juste après cette mesure, le texte peut
-    // très légèrement changer de hauteur. On recalcule alors la hauteur
-    // sans animation pour ne jamais laisser le contenu déborder.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        descSwap.style.transition = 'none';
-        syncSwapHeight();
-        void descSwap.offsetHeight;
-        descSwap.style.transition = '';
-      });
-    }
-
-    // Même logique lors d'un redimensionnement de la fenêtre (le texte
-    // peut se réenrouler sur un nombre de lignes différent).
-    window.addEventListener('resize', () => {
-      if (!modal.classList.contains('active')) return;
-      descSwap.style.transition = 'none';
-      syncSwapHeight();
-      void descSwap.offsetHeight;
-      descSwap.style.transition = '';
+      activeDescPanel = panelShort;
+      descSwap.style.height = `${panelShort.scrollHeight}px`;
     });
 
 

@@ -404,42 +404,75 @@ footer { margin-top: 4rem; border-top: 1px solid var(--card-border); padding-top
   pointer-events: auto;
 }
 
-.modal-expand-btn,
-.modal-collapse-btn {
+/* Bouton principal : "Voir les details techniques".
+   Traite comme un vrai CTA (fond teinte accent, s'illumine et se souleve
+   au survol) pour bien indiquer qu'il donne acces a davantage de contenu. */
+.modal-expand-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0.6rem;
   width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--card-border);
-  color: var(--text);
-  padding: 0.8rem 1.2rem;
-  border-radius: 8px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--accent);
+  padding: 0.85rem 1.2rem;
+  border-radius: 10px;
   font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  /* Marge de securite : evite que le bouton ne se retrouve pile au ras du
+     bord inferieur mesure par le ResizeObserver (voir script.js) */
+  margin-bottom: 0.1rem;
 }
 
-body.light-theme .modal-expand-btn,
-body.light-theme .modal-collapse-btn {
-  background: rgba(0, 0, 0, 0.03);
-}
-
-.modal-expand-btn:hover,
-.modal-collapse-btn:hover {
+.modal-expand-btn:hover {
+  background: var(--accent);
+  color: #05080f;
   border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px var(--accent-glow);
 }
 
-.modal-collapse-btn {
-  margin-bottom: 1rem;
+.modal-expand-btn:active {
+  transform: translateY(0);
 }
 
 .modal-expand-btn .chevron {
-  transition: transform 0.3s ease;
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-expand-btn:hover .chevron {
+  transform: translateY(-3px);
+}
+
+/* Bouton secondaire : "Retour a l'apercu", en haut du panneau detaille.
+   Volontairement discret (style lien) pour ne pas concurrencer le CTA
+   principal ni le contenu detaille qui suit. */
+.modal-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.3rem 0;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.modal-collapse-btn:hover {
+  color: var(--accent);
+  gap: 0.65rem;
 }
 
 .modal-detailed-content h3 {

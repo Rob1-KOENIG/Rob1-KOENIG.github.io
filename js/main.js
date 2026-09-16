@@ -720,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
             class="modal-expand-btn"
             id="modal-expand-btn"
           >
-            <span>Voir les détails techniques</span>
+            <span>See technical informations</span>
             <span class="chevron" aria-hidden="true">↑</span>
           </button>
         </div>
@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
             class="modal-collapse-btn"
             id="modal-collapse-btn"
           >
-            <span>← Retour à l'aperçu</span>
+            <span>← Back to preview</span>
           </button>
 
           <div class="modal-detailed-content">

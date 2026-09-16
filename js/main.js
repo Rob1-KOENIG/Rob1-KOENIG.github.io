@@ -1,5 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ---------------------------------------------------------------------------
+  // CORRECTIF "DOUBLE TAP" SUR SAFARI iOS
+  // ---------------------------------------------------------------------------
+  // Sur iOS Safari, quand un élément cliquable a un ancêtre avec une règle
+  // :hover (ici .card:hover, qui gère l'effet de survol des cartes projet)
+  // et que le clic est en fait géré par un ancêtre différent (ici la
+  // délégation d'événement sur #projects-container), le premier tap ne fait
+  // que "simuler" le survol et le clic ne part réellement qu'au second tap.
+  // C'est ce qui donnait cette impression qu'il fallait taper deux fois, et
+  // que ça mettait du temps à réagir (le premier tap semblait ne rien
+  // faire). Le correctif standard : un simple listener touchstart, même
+  // vide, suffit à faire disparaître ce comportement.
+  document.addEventListener('touchstart', () => {}, { passive: true });
+
+
+  // ---------------------------------------------------------------------------
   // THEME TOGGLE ENGINE
   // ---------------------------------------------------------------------------
   const themeToggleBtn = document.getElementById('theme-toggle');

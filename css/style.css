@@ -189,11 +189,24 @@ h2::after {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
-  /* La carte se soulève ET grandit de 2%, ce qui donne un effet très organique */
-  transform: translateY(-10px) scale(1.02);
-  border-color: rgba(56, 189, 248, 0.5); /* Bordure lumineuse douce */
-  box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.25);
+/* On restreint les effets de survol aux appareils qui ont un vrai pointeur
+   (souris/trackpad). Sur tactile, ces règles peuvent rester "collées" après
+   un tap (pas de vrai mouse-leave) et sont la cause du bug de double-tap
+   sur Safari iOS évoqué dans script.js — autant ne les charger que là où
+   elles ont un sens. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    /* La carte se soulève ET grandit de 2%, ce qui donne un effet très organique */
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(56, 189, 248, 0.5); /* Bordure lumineuse douce */
+    box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.25);
+  }
+
+  .card:hover .card-img {
+    /* Au survol, l'image zoome et s'illumine ! */
+    transform: scale(1.08);
+    filter: brightness(1.1) contrast(1);
+  }
 }
 
 .card-img-wrapper { width: 100%; height: 210px; cursor: pointer; overflow: hidden; position: relative; }
@@ -204,12 +217,6 @@ h2::after {
   filter: brightness(0.85) contrast(1.05);
   /* L'animation de zoom et de lumière de l'image (légèrement plus lente que la carte pour un effet parallax) */
   transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease; 
-}
-
-.card:hover .card-img { 
-  /* Au survol, l'image zoome et s'illumine ! */
-  transform: scale(1.08); 
-  filter: brightness(1.1) contrast(1);
 }
 
 .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
@@ -332,7 +339,31 @@ h2::after {
 }
 @media (max-width: 640px) {
   .modal-header { padding: 1.25rem 3.5rem 1rem 1.25rem; }
-  .modal-close { top: 0.9rem; right: 1rem; }
+
+  /* "position: absolute" reste, en théorie, indépendant du scroll interne —
+     mais les navigateurs mobiles redimensionnent le viewport en direct
+     quand la barre d'adresse apparaît/disparaît PENDANT qu'on scrolle la
+     modale, ce qui peut redéclencher un recalcul de la position d'un
+     élément absolu. "position: fixed" épingle directement au viewport
+     visuel réel et ignore totalement ces recalculs : c'est la seule
+     garantie que la croix ne bouge plus jamais sur mobile. Comme la
+     modale occupe tout l'écran sur mobile (voir .modal-container plus
+     haut), ça correspond de toute façon exactement à l'endroit voulu. */
+  .modal-close {
+    position: fixed;
+    top: 0.9rem;
+    right: 1rem;
+    z-index: 1010;
+    /* Petit fondu à l'ouverture plutôt qu'un déplacement : comme l'élément
+       est fixe dès le départ, il n'a pas à "suivre" l'animation de la
+       carte qui glisse depuis le bas — juste à apparaître en douceur. */
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+
+  .modal-overlay.active .modal-close {
+    opacity: 1;
+  }
 }
 
 .modal-category { color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem; display: block; margin-bottom: 0.5rem; }

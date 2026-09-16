@@ -237,6 +237,20 @@ h2::after {
 }
 .modal-overlay.active { display: flex; opacity: 1; }
 
+/* Wrapper qui enveloppe la carte ET le bouton fermer. Le bouton y est
+   positionné en absolu, alors que SEUL .modal-container (à l'intérieur)
+   défile : la croix se retrouve donc structurellement hors de la zone de
+   scroll, et ne peut plus jamais bouger avec le contenu, quel que soit le
+   navigateur ou le comportement de "position: sticky". */
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+}
+@media (max-width: 640px) {
+  .modal-dialog { max-width: 100%; height: 100%; }
+}
+
 .modal-container {
   background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px;
   width: 100%; max-width: 1100px; position: relative;
@@ -248,6 +262,7 @@ h2::after {
   max-height: 90vh;
   max-height: 90svh;
   overflow-y: auto;
+  overflow-x: hidden;
   /* Défilement fluide sur iOS (inertie) + empêche le "rebond" de fuiter
      vers la page en dessous quand on arrive en haut/bas du contenu */
   -webkit-overflow-scrolling: touch;
@@ -295,7 +310,13 @@ h2::after {
   }
 }
 
-.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 2rem; line-height: 1; cursor: pointer; z-index: 10; transition: color 0.2s; position: absolute; top: 1rem; right: 1.5rem; }
+/* Positionnée en absolu sur .modal-dialog (voir plus haut) — donc figée
+   dans le coin de la modale, indépendamment de tout défilement interne. */
+.modal-close {
+  background: transparent; border: none; color: var(--text-muted);
+  font-size: 2rem; line-height: 1; cursor: pointer; transition: color 0.2s;
+  position: absolute; top: 1rem; right: 1.5rem; z-index: 20;
+}
 .modal-close:hover { color: var(--accent); }
 
 .modal-header {
@@ -303,21 +324,29 @@ h2::after {
   border-bottom: 1px solid var(--card-border);
   /* Reste visible en haut pendant que le corps de la modale défile en
      dessous : sur mobile, on n'a plus besoin de remonter tout en haut
-     pour retrouver le bouton fermer. */
+     pour retrouver le titre du projet. */
   position: sticky;
   top: 0;
   z-index: 5;
   background: var(--bg);
 }
 @media (max-width: 640px) {
-  .modal-header { padding: 1.25rem 1.25rem 1rem; }
+  .modal-header { padding: 1.25rem 3.5rem 1rem 1.25rem; }
   .modal-close { top: 0.9rem; right: 1rem; }
 }
 
 .modal-category { color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem; display: block; margin-bottom: 0.5rem; }
 .modal-title { font-size: 1.8rem; color: var(--text); margin-bottom: 1rem; border: none; padding: 0; }
 
-.modal-body { display: grid; grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+.modal-body {
+  display: grid; grid-template-columns: 1fr; gap: 2rem; padding: 2rem;
+  /* Par défaut, un enfant de grid ne peut pas rétrécir sous la largeur de
+     son propre contenu (min-width: auto implicite). C'est ce qui laissait
+     la rangée de miniatures forcer toute la modale à s'élargir et
+     devenir scrollable horizontalement. */
+  min-width: 0;
+}
+.modal-body > * { min-width: 0; }
 @media (min-width: 800px) {
   .modal-body { grid-template-columns: 1.2fr 1fr; }
   .modal-text-content { position: sticky; top: 2rem; height: max-content; }
@@ -326,7 +355,7 @@ h2::after {
   .modal-body { padding: 1.25rem; gap: 1.5rem; }
 }
 
-.modal-gallery { display: flex; flex-direction: column; gap: 1rem; }
+.modal-gallery { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
 .gallery-main { position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--card-border); touch-action: pan-y; }
 .gallery-main img { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: contain; transition: opacity 0.2s ease; }
 .gallery-arrow {
@@ -342,7 +371,31 @@ h2::after {
   .gallery-arrow { width: 44px; height: 44px; }
 }
 
+/* Compteur "2 / 5" affiché uniquement sur mobile, en remplacement des
+   miniatures (voir .gallery-thumbnails ci-dessous) : donne le même repère
+   de position dans la galerie sans jamais risquer de déborder. */
+.gallery-counter {
+  display: none;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+}
+@media (max-width: 640px) {
+  .gallery-counter { display: inline-flex; }
+}
+
 .gallery-thumbnails { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--card-border) transparent; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+/* Sur mobile, les miniatures forçaient la modale à s'élargir et à devenir
+   scrollable horizontalement. On les remplace par le compteur ci-dessus,
+   la navigation restant possible via les flèches et le swipe. */
+@media (max-width: 640px) {
+  .gallery-thumbnails { display: none; }
+}
 .gallery-thumbnails img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.4; border: 2px solid transparent; transition: opacity 0.2s, border-color 0.2s; }
 .gallery-thumbnails img:hover { opacity: 0.8; }
 .gallery-thumbnails .thumb.active { opacity: 1; border-color: var(--accent); }

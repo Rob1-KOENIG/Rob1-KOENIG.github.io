@@ -857,6 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </button>
         </div>
 
+        <span class="gallery-counter" id="gallery-counter">1 / ${currentGallery.length}</span>
+
         <div class="gallery-thumbnails">
           ${currentGallery
             .map(
@@ -908,6 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const prevBtn = document.getElementById('gallery-prev');
       const nextBtn = document.getElementById('gallery-next');
       const thumbs = mGallery.querySelectorAll('.thumb');
+      const counter = document.getElementById('gallery-counter');
 
       const updateGalleryView = (index) => {
         currentImageIndex = index;
@@ -920,6 +923,10 @@ document.addEventListener('DOMContentLoaded', () => {
           mainImg.src = currentGallery[currentImageIndex];
           mainImg.style.opacity = '1';
         }, 120);
+
+        if (counter) {
+          counter.textContent = `${currentImageIndex + 1} / ${currentGallery.length}`;
+        }
 
         thumbs.forEach((thumb, thumbIndex) => {
           thumb.classList.toggle(

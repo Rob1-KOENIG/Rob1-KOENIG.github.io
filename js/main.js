@@ -680,6 +680,9 @@ document.addEventListener('DOMContentLoaded', () => {
   mGallery?.classList.add('modal-gallery');
   mText?.classList.add('modal-text');
 
+  const mDialog = modal?.querySelector('.modal-dialog');
+  mDialog?.classList.add('modal-dialog');
+
   let currentGallery = [];
   let currentImageIndex = 0;
   let descResizeObserver = null;

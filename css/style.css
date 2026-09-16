@@ -238,82 +238,87 @@ h2::after {
 .modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(9, 13, 22, 0.85);
   backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center;
-  padding: 1rem; opacity: 0; 
-  /* Apparition du fond noir très douce */
-  transition: opacity 0.4s ease;
+  padding: 1rem; opacity: 0; transition: opacity 0.4s ease;
 }
 .modal-overlay.active { display: flex; opacity: 1; }
 
-/* Wrapper qui enveloppe la carte ET le bouton fermer. Le bouton y est
-   positionné en absolu, alors que SEUL .modal-container (à l'intérieur)
-   défile : la croix se retrouve donc structurellement hors de la zone de
-   scroll, et ne peut plus jamais bouger avec le contenu, quel que soit le
-   navigateur ou le comportement de "position: sticky". */
+/* NOUVEAU : Wrapper statique qui enveloppe la modale et le bouton fermer.
+   C'est lui qui gère l'animation de taille, de façon statique. */
 .modal-dialog {
   position: relative;
   width: 100%;
   max-width: 1100px;
-}
-@media (max-width: 640px) {
-  .modal-dialog { max-width: 100%; height: 100%; }
-}
-
-.modal-container {
-  background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px;
-  width: 100%; max-width: 1100px; position: relative;
-  display: flex; flex-direction: column;
-  /* 90vh classique en repli, mais on privilégie svh/dvh juste après : sur
-     mobile, "vh" est calculé sur la hauteur totale du viewport, barre
-     d'adresse comprise, ce qui rendait la modale plus haute que l'espace
-     réellement visible et la faisait déborder de l'écran. */
-  max-height: 90vh;
-  max-height: 90svh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  /* Défilement fluide sur iOS (inertie) + empêche le "rebond" de fuiter
-     vers la page en dessous quand on arrive en haut/bas du contenu */
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-
-  /* Départ de l'animation : la modale est petite (scale 0.8) et un peu plus basse */
-  transform: scale(0.8) translateY(40px); 
+  max-height: 90vh; /* Ne dépasse jamais l'écran */
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95) translateY(20px); 
   opacity: 0;
 }
 
-/* L'animation au clic : un zoom très progressif */
-.modal-overlay.active .modal-container { 
+/* L'animation s'applique au dialog maintenant */
+.modal-overlay.active .modal-dialog { 
   animation: modalZoom 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
 }
 
 @keyframes modalZoom {
-  0% { opacity: 0; transform: scale(0.8) translateY(40px); }
+  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Sur mobile, la modale devient une feuille plein écran plutôt qu'une
-   carte flottante : plus de risque de dépassement, plus de zone de
-   contenu visible, et une animation de glissement plus proche de ce que
-   les gens connaissent des apps natives (donc plus "fluide" ressenti). */
+/* Le conteneur qui défile est à l'intérieur */
+.modal-container {
+  background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px;
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto; /* Seul ce bloc défile */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Positionnée en absolu sur .modal-dialog statique — elle ne défile donc plus. */
+.modal-close {
+  background: var(--bg); /* Fond uni pour rester lisible */
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; line-height: 1; cursor: pointer; transition: all 0.2s;
+  position: absolute; 
+  top: -15px; /* Déborde légèrement de la carte pour être très visible */
+  right: -15px; 
+  z-index: 20;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.modal-close:hover { color: var(--accent); border-color: var(--accent); transform: scale(1.1); }
+
 @media (max-width: 640px) {
   .modal-overlay { padding: 0; align-items: flex-end; }
 
-  .modal-container {
+  .modal-dialog {
     max-width: 100%;
     max-height: 100svh;
-    max-height: 100dvh;
-    height: 100svh;
-    height: 100dvh;
-    border-radius: 20px 20px 0 0;
+    height: 100svh; /* Occupe tout l'écran sur mobile */
     transform: translateY(100%);
   }
 
-  .modal-overlay.active .modal-container {
+  .modal-container {
+    border-radius: 20px 20px 0 0; /* Arrondi seulement en haut */
+  }
+
+  .modal-overlay.active .modal-dialog {
     animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes modalSlideUp {
     0% { opacity: 0; transform: translateY(100%); }
     100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-close {
+    top: 15px; /* Sur mobile, on la remet à l'intérieur pour éviter qu'elle ne sorte de l'écran */
+    right: 15px;
   }
 }
 

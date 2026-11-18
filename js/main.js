@@ -526,6 +526,113 @@ document.addEventListener('DOMContentLoaded', () => {
         "images/Fiverr_rocket/2.png"
       ],
       tags: ["KiCad", "ESP32-C3", "Aerospace", "PCB Design"]
+    },
+    {
+      id: "boat-hull-simulation",
+      title: "Boat Hull Hydrodynamic Simulation",
+      type: "academic",
+      category: "Final Year Project (PFE)",
+      shortDescription: "Conducted model boat hull simulations in Floatsoft 1.44, resolving CAD-to-STL coordinate mismatches and optimizing the Center of Gravity to prevent capsizing.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>As part of my Final Year Engineering Project (PFE), I focused on the hydrodynamic stability and buoyancy simulation of a custom model boat hull using the Floatsoft 1.44 simulation environment.</p>
+        <h3>CAD & Simulation Troubleshooting</h3>
+        <p>A major challenge involved debugging critical axis orientation mismatches during the CAD-to-STL export process. I resolved length-to-beam inversions and Z-up axis errors by reconfiguring the slicer and CAD coordinate system exports to perfectly align with the simulation software's requirements.</p>
+        <h3>Physics & Stability Optimization</h3>
+        <p>Initial simulations resulted in the hull flipping over. To correct this, I analyzed the buoyancy physics and iteratively lowered the Center of Gravity (CoG) coordinates, achieving a perfectly stable and realistic flotation model.</p>
+      `,
+      image: "images/Boat_Hull/1.jpg",
+      gallery: [
+        "images/Boat_Hull/1.jpg",
+        "images/Boat_Hull/2.jpg",
+        "images/Boat_Hull/3.jpg"
+      ],
+      tags: ["Floatsoft", "3D CAD", "Simulation", "Hydrodynamics"]
+    },
+    {
+      id: "data-diode-pcb",
+      title: "Gigabit Optical Data Diode PCB",
+      type: "freelance",
+      category: "Freelance Engineering (Fiverr)",
+      shortDescription: "Engineered a custom 1 Gb/s RJ45-to-fiber unidirectional data diode PCB in KiCad, featuring strict galvanic isolation and Texas Instruments Ethernet PHYs.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>A high-end freelance commission to design a hardware-level cybersecurity device (Data Diode) ensuring strict unidirectional network traffic from an RJ45 connection to an optical SFP module, effectively preventing any potential data leaks.</p>
+        <h3>Hardware Engineering</h3>
+        <p>I designed the schematic and PCB layout in KiCad to handle 1 Gb/s speeds, integrating Texas Instruments DP83869HM Ethernet PHYs and SFP optical cages. The power architecture is robust, utilizing a 5V buck converter stepped down to 3.3V, 2.5V, and 1.1V, protected by TVS diodes (powered via a Raspberry Pi GPIO interface).</p>
+        <h3>Galvanic Isolation</h3>
+        <p>To meet strict cybersecurity standards, the PCB layout was routed with absolute galvanic isolation. I implemented physically separated ground planes for the TX (Transmit) and RX (Receive) sections to eliminate any risk of an electrical back-channel.</p>
+      `,
+      image: "images/Data_Diode/1.jpg",
+      gallery: [
+        "images/Data_Diode/1.jpg",
+        "images/Data_Diode/2.jpg",
+        "images/Data_Diode/3.jpg"
+      ],
+      tags: ["KiCad", "Cybersecurity", "PCB Design", "Ethernet PHY"]
+    },
+    {
+      id: "aiops-log-analysis",
+      title: "AIOps Automated Log Analysis System",
+      type: "academic", // Ou "professional"
+      category: "Engineering Internship (NCC-INFO)",
+      shortDescription: "Architected and deployed a local LLM-based AIOps pipeline to automate IT email log analysis, utilizing Python, Microsoft Graph API, MySQL, and a dual-GPU Dell server.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>During a four-month engineering internship at NCC-INFO, I designed and deployed an automated AIOps (Artificial Intelligence for IT Operations) solution to supervise network logs, drastically reducing information overload and false-positive alerts for the technical team.</p>
+        <h3>Software Architecture</h3>
+        <p>I built a robust data pipeline in Python (with a PyQt/PySide interface). The system ingests heterogeneous email logs using the Microsoft Graph API, processes and structures the data into a MySQL database, and applies chronological filtering to ignore resolved outages and focus only on persistent incidents.</p>
+        <h3>Hardware & AI Infrastructure</h3>
+        <p>To guarantee absolute data privacy (air-gapped environment), the AI analysis runs locally. I configured a Dell PowerEdge R740xd server running Proxmox VE, utilizing dual NVIDIA Tesla V100 GPUs (vGPU configuration) for fast, secure local LLM inference.</p>
+      `,
+      image: "images/AIOps/1.jpg", // Mets le bon chemin d'image
+      gallery: [
+        "images/AIOps/1.jpg",
+        "images/AIOps/2.jpg"
+      ],
+      tags: ["Python", "Local LLM", "Proxmox", "AIOps", "MySQL"]
+    },
+    {
+      id: "minesweeper-parallel-solver",
+      title: "Parallel Minesweeper MCMC Solver",
+      type: "academic",
+      category: "Algorithm Optimization",
+      shortDescription: "Developed a highly optimized, parallelized Minesweeper solver using Markov Chain Monte Carlo (MCMC) methods, pthreads, and OpenMP for massive 10,000-size grids.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>Developed an advanced algorithmic solver for Minesweeper capable of tackling massive grid sizes (up to 10,000 cells) where traditional deterministic backtracking methods suffer from combinatorial explosion.</p>
+        <h3>Probabilistic Resolution (MCMC)</h3>
+        <p>Implemented a Markov Chain Monte Carlo (MCMC) sampling method to calculate the probability of mine presence in ambiguous situations, allowing the solver to make mathematically optimal decisions when deterministic logic fails.</p>
+        <h3>Parallel Computing Optimization</h3>
+        <p>To maximize execution speed on large datasets, I heavily parallelized the algorithm using pthreads and OpenMP. I implemented dynamic load balancing with atomic fetch-and-add operations to efficiently distribute the workload across multiple CPU cores, validating the performance scaling against Amdahl's Law.</p>
+      `,
+      image: "images/Minesweeper/1.jpg", // Mets le bon chemin
+      gallery: [
+        "images/Minesweeper/1.jpg",
+        "images/Minesweeper/2.jpg"
+      ],
+      tags: ["C++", "OpenMP", "Multithreading", "Algorithms", "MCMC"]
+    },
+    {
+      id: "acp127-crypto-hackathon",
+      title: "ACP 127 Military Crypto-Terminal",
+      type: "academic",
+      category: "Defense Hackathon",
+      shortDescription: "Engineered a secure military message encrypter (ACP 127 standard) in Rust on STM32 during a defense hackathon, featuring TEMPEST hardening and RS-232 communication.",
+      longDescription: `
+        <h3>Project Overview</h3>
+        <p>Participated in a high-intensity defense hackathon for the Commissariat au Numérique de Défense (CND) with a 6-student team. Our objective was to engineer a secure, modernized military message terminal complying with the legacy ACP 127 protocol.</p>
+        <h3>Embedded Software (Rust)</h3>
+        <p>Developed the firmware in Rust for an STM32 microcontroller, focusing on memory safety and real-time execution. The software handles ITA-3 encoding and secure data transmission via an RS-232 hardware interface.</p>
+        <h3>Hardware & Mechanical Design</h3>
+        <p>I managed the hardware integration, implementing a 12V-to-3.3V regulated power supply. Furthermore, I designed a rugged, IP68-rated 3D-printed enclosure (90×150×100 mm) incorporating TEMPEST electromagnetic shielding principles to protect against side-channel attacks.</p>
+      `,
+      image: "images/Hackathon/1.jpg", // Mets le bon chemin
+      gallery: [
+        "images/Hackathon/1.jpg",
+        "images/Hackathon/2.jpg"
+      ],
+      tags: ["Rust", "STM32", "Cybersecurity", "Embedded Systems"]
     }
   ];
 

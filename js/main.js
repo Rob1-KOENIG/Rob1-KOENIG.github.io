@@ -631,7 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
       image: "images/Hackathon/1.jpg", 
       gallery: [
         "images/Hackathon/1.jpg",
-        "images/Hackathon/2.jpg"
+        "images/Hackathon/2.jpg",
+        "images/Hackathon/3.png",
       ],
       tags: ["Rust", "STM32", "Cybersecurity", "Embedded Systems"]
     }

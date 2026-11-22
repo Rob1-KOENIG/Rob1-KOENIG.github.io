@@ -544,8 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
       image: "images/Boat_Hull/1.jpg",
       gallery: [
         "images/Boat_Hull/1.jpg",
-        "images/Boat_Hull/2.jpg",
-        "images/Boat_Hull/3.jpg"
+        "images/Boat_Hull/2.jpeg",
+        "images/Boat_Hull/3.jpeg"
       ],
       tags: ["Floatsoft", "3D CAD", "Simulation", "Hydrodynamics"]
     },
@@ -563,11 +563,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>Galvanic Isolation</h3>
         <p>To meet strict cybersecurity standards, the PCB layout was routed with absolute galvanic isolation. I implemented physically separated ground planes for the TX (Transmit) and RX (Receive) sections to eliminate any risk of an electrical back-channel.</p>
       `,
-      image: "images/Data_Diode/1.jpg",
+      image: "images/Data_Diode/1.png",
       gallery: [
-        "images/Data_Diode/1.jpg",
-        "images/Data_Diode/2.jpg",
-        "images/Data_Diode/3.jpg"
+        "images/Data_Diode/1.png",
+        "images/Data_Diode/2.png",
+        "images/Data_Diode/3.png"
       ],
       tags: ["KiCad", "Cybersecurity", "PCB Design", "Ethernet PHY"]
     },
@@ -585,10 +585,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>Hardware & AI Infrastructure</h3>
         <p>To guarantee absolute data privacy (air-gapped environment), the AI analysis runs locally. I configured a Dell PowerEdge R740xd server running Proxmox VE, utilizing dual NVIDIA Tesla V100 GPUs (vGPU configuration) for fast, secure local LLM inference.</p>
       `,
-      image: "images/AIOps/1.jpg", // Mets le bon chemin d'image
+      image: "images/AIOps/1.png", 
       gallery: [
-        "images/AIOps/1.jpg",
-        "images/AIOps/2.jpg"
+        "images/AIOps/1.png",
+        "images/AIOps/2.png"
       ],
       tags: ["Python", "Local LLM", "Proxmox", "AIOps", "MySQL"]
     },
@@ -606,10 +606,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>Parallel Computing Optimization</h3>
         <p>To maximize execution speed on large datasets, I heavily parallelized the algorithm using pthreads and OpenMP. I implemented dynamic load balancing with atomic fetch-and-add operations to efficiently distribute the workload across multiple CPU cores, validating the performance scaling against Amdahl's Law.</p>
       `,
-      image: "images/Minesweeper/1.jpg", // Mets le bon chemin
+      image: "images/Minesweeper/1.png", 
       gallery: [
-        "images/Minesweeper/1.jpg",
-        "images/Minesweeper/2.jpg"
+        "images/Minesweeper/1.png",
+        "images/Minesweeper/2.png",
+        "images/Minesweeper/3.png"
       ],
       tags: ["C++", "OpenMP", "Multithreading", "Algorithms", "MCMC"]
     },
@@ -627,7 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>Hardware & Mechanical Design</h3>
         <p>I managed the hardware integration, implementing a 12V-to-3.3V regulated power supply. Furthermore, I designed a rugged, IP68-rated 3D-printed enclosure (90×150×100 mm) incorporating TEMPEST electromagnetic shielding principles to protect against side-channel attacks.</p>
       `,
-      image: "images/Hackathon/1.jpg", // Mets le bon chemin
+      image: "images/Hackathon/1.jpg", 
       gallery: [
         "images/Hackathon/1.jpg",
         "images/Hackathon/2.jpg"

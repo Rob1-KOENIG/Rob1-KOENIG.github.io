@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const projects = [
     {
       id: "formula-student",
+      date: "2026-04",
       title: "Formula Student — CAN Bus Node",
       type: "academic",
       category: "ARECE Autonomous Racing",
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "rover-lidar",
+      date: "2026-03",
       title: "Autonomous Rover & LIDAR Navigation",
       type: "academic",
       category: "Mobile Robotics",
@@ -114,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "cv-robot",
+      date: "2024-06",
       title: "Computer Vision Sorting Robot",
       type: "academic",
       category: "Robotics & OpenCV",
@@ -137,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "fpga-elevator",
+      date: "2023-12",
       title: "FPGA Elevator Controller",
       type: "academic",
       category: "Digital Electronics",
@@ -157,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "pic18f-flappy",
+      date: "2025-11",
       title: "Flappy Bird on PIC18F & NEAT AI",
       type: "academic",
       category: "Embedded Systems & AI",
@@ -179,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "voice-trivia",
+      date: "2025-04",
       title: "Voice Recognition Trivia Game",
       type: "academic",
       category: "Audio DSP & Machine Learning",
@@ -202,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "game-of-life",
+      date: "2025-11",
       title: "Conway's Game of Life in C",
       type: "academic",
       category: "Advanced C Programming",
@@ -224,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "graph-optimization",
+      date: "2024-02",
       title: "Assembly Line Graph Optimization",
       type: "academic",
       category: "Algorithms & Graph Theory",
@@ -242,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "c-games-allegro",
+      date: "2023-05",
       title: "2D Games in C (Allegro)",
       type: "academic",
       category: "Game Development",
@@ -266,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "blabla-omnes",
+      date: "2024-05",
       title: "BlaBla-Omnes Carpooling Platform",
       type: "academic",
       category: "Full-Stack Web Development",
@@ -287,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "theme-park",
+      date: "2025-06",
       title: "Theme Park Management App",
       type: "academic",
       category: "Software Engineering",
@@ -307,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "fertilyon",
+      date: "2023-06",
       title: "FertiLyon Smart Compost Bin",
       type: "academic",
       category: "Sustainable Tech",
@@ -328,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "tube-amp",
+      date: "2026-11",
       title: "Push-Pull Tube Audio Amplifier",
       type: "personal",
       category: "Analog & High Voltage",
@@ -349,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "bookshelf-speakers",
+      date: "2021-09",
       title: "Bookshelf Speakers & Active Subwoofer",
       type: "personal",
       category: "Electroacoustics & Woodworking",
@@ -373,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "tape-recorder",
+      date: "2024-04",
       title: "Magnetic Tape Player Restoration",
       type: "personal",
       category: "Electronics Repair",
@@ -397,6 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "tape-reels",
+      date: "2024-07",
       title: "Custom 3D Printed Tape Reels",
       type: "personal",
       category: "3D CAD & Printing",
@@ -418,6 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "fiverr-houses",
+      date: "2025-09",
       title: "3D Architectural Replicas",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
@@ -440,6 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "banana-speaker",
+      date: "2026-07",
       title: "Banana-Shaped Acoustic Speaker",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
@@ -461,6 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "portal-turret-speaker",
+      date: "2024-05",
       title: 'Custom "Portal Turret" Wall Speaker',
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
@@ -485,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "turntable-horn-cabinet",
+      date: "2026-05",
       title: "Custom Turntable & Horn Speaker Cabinet",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
@@ -508,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "water-rocket-fc",
+      date: "2026-07",
       title: "Water Rocket Flight Controller",
       type: "freelance",
       category: "Aerospace & Embedded Systems",
@@ -529,6 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "boat-hull-simulation",
+      date: "2026-11",
       title: "Boat Hull Hydrodynamic Simulation",
       type: "academic",
       category: "Final Year Project (PFE)",
@@ -551,6 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "data-diode-pcb",
+      date: "2026-11",
       title: "Gigabit Optical Data Diode PCB",
       type: "freelance",
       category: "Freelance Engineering (Fiverr)",
@@ -573,6 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "aiops-log-analysis",
+      date: "2026-08",
       title: "AIOps Automated Log Analysis System",
       type: "academic", // Ou "professional"
       category: "Engineering Internship (NCC-INFO)",
@@ -594,6 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "minesweeper-parallel-solver",
+      date: "2026-11",
       title: "Parallel Minesweeper MCMC Solver",
       type: "academic",
       category: "Algorithm Optimization",
@@ -616,6 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: "acp127-crypto-hackathon",
+      date: "2026-11",
       title: "ACP 127 Military Crypto-Terminal",
       type: "academic",
       category: "Defense Hackathon",
@@ -658,6 +684,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Création de toutes les cartes
   // -----------------------------------------------------------------------------
 
+  // Transforme "2026-11" en "Nov 2026"
+  const formatProjectDate = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month] = dateStr.split("-");
+    if (!month) return year;
+    const dateObj = new Date(Number(year), Number(month) - 1);
+    return dateObj.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  };
+
+  projects.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
   projects.forEach((project) => {
     const card = document.createElement('article');
 
@@ -693,6 +730,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="card-description">
           ${project.shortDescription}
         </p>
+
+        <span class="card-category">
+          ${project.category}${project.date ? ` • ${formatProjectDate(project.date)}` : ""}
+        </span>
 
         <div class="card-tags">
           ${tagsHtml}
@@ -844,7 +885,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Informations principales
     // ---------------------------------------------------------------------------
 
-    mCategory.textContent = project.category;
+    //mCategory.textContent = project.category;
+    
+    mCategory.textContent = project.date
+      ? `${project.category} • ${formatProjectDate(project.date)}`
+      : project.category;
+    
     mTitle.textContent = project.title;
 
     mTags.innerHTML = project.tags
